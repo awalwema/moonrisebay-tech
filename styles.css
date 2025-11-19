@@ -1,6 +1,45 @@
+/* Custom Color Palette */
+:root {
+  --midnight: #1a1f3a;
+  --ocean: #2d5f8d;
+  --bay: #4a90c5;
+  --sunrise: #f4a261;
+  --coral: #e76f51;
+  --cream: #fef9f3;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Typography */
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+h1,
+h2,
+.section-title {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
 /* Typography Tweaks */
 .section-title {
   @apply text-3xl md:text-4xl font-bold text-gray-900;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::before {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 4px;
+  background: linear-gradient(to right, #4a90c5, #f4a261);
+  margin-bottom: 16px;
+  border-radius: 2px;
 }
 
 .subheading {
@@ -13,5 +52,48 @@
 
 /* Buttons */
 .btn-primary {
-  @apply px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md shadow transition;
+  @apply px-8 py-4 text-white font-semibold rounded-lg shadow-lg;
+  background: linear-gradient(to right, var(--sunrise), var(--coral));
+  transition: all 0.3s ease-out;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, var(--coral), var(--sunrise));
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(244, 162, 97, 0.3),
+    0 10px 10px -5px rgba(244, 162, 97, 0.2);
+}
+
+/* Better focus states for accessibility */
+a:focus-visible,
+button:focus-visible {
+  @apply outline outline-2 outline-offset-2 ring-0;
+  outline-color: var(--bay);
+}
+
+/* Link hover states */
+a.btn-primary:focus {
+  box-shadow: 0 0 0 3px rgba(74, 144, 197, 0.3);
+}
+
+/* Enhanced card styles */
+.project-card,
+.skill-card {
+  transition: all 0.3s ease-out;
+}
+
+.project-card:hover,
+.skill-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  border-color: var(--bay);
+  transform: translateY(-4px);
+}
+
+/* Section dividers */
+section {
+  @apply border-b border-gray-200;
+}
+
+section:last-of-type {
+  @apply border-b-0;
 }
