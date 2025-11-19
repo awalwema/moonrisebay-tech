@@ -1,0 +1,17 @@
+/* Typography Tweaks */
+.section-title {
+  @apply text-3xl md:text-4xl font-bold text-gray-900;
+}
+
+.subheading {
+  @apply text-xl font-semibold text-gray-800;
+}
+
+.body-text {
+  @apply mt-2 text-gray-600 leading-relaxed;
+}
+
+/* Buttons */
+.btn-primary {
+  @apply px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md shadow transition;
+}
