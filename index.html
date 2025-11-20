@@ -197,7 +197,7 @@
             data-logo="logos/weavlog.png"
             data-company="Weavlog"
           >
-            Weavlog
+            WeaVlog
           </a>
           <a
             href="https://digitaleventsinc.com/"
@@ -219,6 +219,16 @@
           >
             FaithFilter
           </a>
+          <a
+            href="https://jjpropertymgmt.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="company-link"
+            data-logo="logos/jjpropertymgmt.png"
+            data-company="JJ Property Management"
+          >
+            JJ Property Management
+          </a>
         </div>
       </div>
     </section>
@@ -230,7 +240,8 @@
 
         <div class="space-y-10 mt-10">
           <div
-            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200"
+            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="hearlabs"
           >
             <h3 class="subheading">🔊 HearLabs – Smart TV Audio iOS App</h3>
             <p class="body-text">
@@ -238,10 +249,14 @@
               Implemented Bluetooth pairing, Firebase auth, and TestFlight
               distribution.
             </p>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
+            </p>
           </div>
 
           <div
-            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200"
+            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="sipandscroll"
           >
             <div class="flex items-center gap-3 flex-wrap mb-2">
               <h3 class="subheading mb-0">
@@ -257,10 +272,14 @@
               iOS app using AI vision to verify "water selfies" before unlocking
               social apps. Includes habit tracking and weekly insights.
             </p>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
+            </p>
           </div>
 
           <div
-            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200"
+            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="faithfilter"
           >
             <h3 class="subheading">
               🧠 FaithFilter – AI Media Discovery Platform
@@ -268,6 +287,9 @@
             <p class="body-text">
               Built LLM-powered vector search, a content ingestion pipeline, and
               a custom React admin dashboard for curators.
+            </p>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
             </p>
           </div>
         </div>
@@ -282,9 +304,9 @@
         <p class="mt-6 text-gray-700 leading-relaxed">
           Moonrise Bay Technologies is the solo consultancy of
           <strong>Andrew Walwema</strong>, a software engineer based in
-          Brooklyn. Before working with startups, I spent 3+ years at Oracle
-          Cloud Infrastructure building large-scale managed services using Java,
-          Python, React, Docker, and Kubernetes.
+          Brooklyn, New York. Before working with startups, I spent 3+ years at
+          Oracle Cloud Infrastructure building large-scale managed services
+          using Java, Python, React, Docker, and Kubernetes.
         </p>
 
         <p class="mt-4 text-gray-700 leading-relaxed">
@@ -332,6 +354,124 @@
         </p>
       </div>
     </footer>
+
+    <!-- PROJECT MODAL -->
+    <div id="project-modal" class="project-modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+
+        <div class="modal-grid">
+          <!-- Left Sidebar -->
+          <aside class="modal-sidebar">
+            <div class="sidebar-section">
+              <h4 class="sidebar-label">Company</h4>
+              <p class="sidebar-value" id="modal-company">HearLabs</p>
+            </div>
+
+            <div class="sidebar-section">
+              <h4 class="sidebar-label">Industry</h4>
+              <p class="sidebar-value" id="modal-industry">Consumer Tech</p>
+            </div>
+
+            <div class="sidebar-section">
+              <h4 class="sidebar-label">Tech Stack</h4>
+              <div class="tech-carousel">
+                <button
+                  class="carousel-btn carousel-prev"
+                  aria-label="Previous"
+                >
+                  ‹
+                </button>
+                <div class="tech-logos-wrapper">
+                  <div class="tech-logos" id="modal-tech-logos">
+                    <!-- Tech logos will be inserted here -->
+                  </div>
+                </div>
+                <button class="carousel-btn carousel-next" aria-label="Next">
+                  ›
+                </button>
+              </div>
+            </div>
+
+            <a
+              href="#"
+              id="modal-website-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="sidebar-btn"
+            >
+              Visit Website ↗
+            </a>
+          </aside>
+
+          <!-- Right Content -->
+          <main class="modal-main">
+            <h2 class="modal-title" id="modal-title">Project Title</h2>
+
+            <div class="modal-hero-image">
+              <img
+                id="modal-hero"
+                src="https://via.placeholder.com/1200x800/4a90c5/ffffff?text=Project+Hero+Image"
+                alt="Project hero"
+              />
+            </div>
+
+            <div class="modal-description">
+              <h3>Project Overview</h3>
+              <p id="modal-overview">Project description goes here...</p>
+            </div>
+
+            <div class="modal-description">
+              <h3>Key Features</h3>
+              <ul id="modal-features">
+                <!-- Features will be inserted here -->
+              </ul>
+            </div>
+
+            <!-- Demo Video Section -->
+            <div
+              class="modal-video-section"
+              id="modal-video-section"
+              style="display: none"
+            >
+              <h3>🎬 See It In Action</h3>
+              <div class="video-container">
+                <video
+                  id="modal-video"
+                  class="project-video"
+                  controls
+                  preload="metadata"
+                >
+                  <source src="" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div class="video-play-overlay" id="video-play-overlay">
+                  <button class="video-play-button" aria-label="Play video">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                      <circle
+                        cx="40"
+                        cy="40"
+                        r="40"
+                        fill="rgba(74, 144, 197, 0.9)"
+                      />
+                      <path d="M32 25L55 40L32 55V25Z" fill="white" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-gallery">
+              <h3>Gallery</h3>
+              <div class="gallery-grid" id="modal-gallery">
+                <!-- Gallery images will be inserted here -->
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
 
     <script src="main.js"></script>
   </body>
