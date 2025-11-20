@@ -16,6 +16,15 @@ html {
 /* Typography */
 body {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: linear-gradient(
+    to bottom,
+    #fef9f3 0%,
+    white 20%,
+    #f9fafb 40%,
+    white 60%,
+    #fef9f3 80%,
+    white 100%
+  );
 }
 
 h1,
@@ -39,11 +48,15 @@ h2,
   height: 4px;
   background: linear-gradient(to right, #4a90c5, #f4a261);
   margin-bottom: 16px;
-  border-radius: 2px;
+  border-radius: 50px;
 }
 
 .subheading {
   @apply text-xl font-semibold text-gray-800;
+}
+
+.subheading.mb-0 {
+  margin-bottom: 0;
 }
 
 .body-text {
@@ -52,9 +65,13 @@ h2,
 
 /* Buttons */
 .btn-primary {
-  @apply px-8 py-4 text-white font-semibold rounded-lg shadow-lg;
-  background: linear-gradient(to right, var(--sunrise), var(--coral));
+  @apply text-white font-semibold shadow-lg;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--sunrise), var(--coral));
+  border-radius: 50px;
   transition: all 0.3s ease-out;
+  display: inline-block;
+  text-decoration: none;
 }
 
 .btn-primary:hover {
@@ -89,11 +106,21 @@ a.btn-primary:focus {
   transform: translateY(-4px);
 }
 
-/* Section dividers */
+/* Section flow - remove all rigid backgrounds */
 section {
-  @apply border-b border-gray-200;
+  background: transparent !important;
+  border: none;
 }
 
-section:last-of-type {
-  @apply border-b-0;
+/* Company logo links */
+.company-logo {
+  opacity: 0.7;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.company-logo:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  text-decoration: none;
 }
