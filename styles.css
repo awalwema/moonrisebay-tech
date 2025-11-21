@@ -72,6 +72,10 @@ h2,
   transition: all 0.3s ease-out;
   display: inline-block;
   text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 50;
 }
 
 .btn-primary:hover {
@@ -292,62 +296,141 @@ section {
   color: rgb(31, 41, 55);
 }
 
-.tech-carousel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.carousel-btn {
-  background: white;
-  border: 1px solid rgb(229, 231, 235);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.carousel-btn:hover {
-  background: var(--bay);
-  color: white;
-  border-color: var(--bay);
-}
-
-.tech-logos-wrapper {
-  flex: 1;
+.tech-stack-scroll {
   overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
 }
 
 .tech-logos {
   display: flex;
-  gap: 12px;
-  transition: transform 0.3s ease;
+  gap: 16px;
+  width: max-content;
+  animation: scroll-left 30s linear infinite;
+}
+
+.tech-logos:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .tech-logo-item {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  padding: 12px;
   background: white;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 12px;
   border: 1px solid rgb(229, 231, 235);
+  min-width: 80px;
+  transition: all 0.3s ease;
+}
+
+.tech-logo-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--bay);
 }
 
 .tech-logo-item img {
-  width: 100%;
-  height: 100%;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
+}
+
+.tech-logo-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgb(75, 85, 99);
+  text-align: center;
+  text-transform: capitalize;
+}
+
+/* Home Tech Stack Carousel */
+.home-tech-scroll {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 15%,
+    black 85%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 15%,
+    black 85%,
+    transparent
+  );
+  padding: 20px 0;
+}
+
+.home-tech-logos {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: scroll-left 25s linear infinite;
+}
+
+.home-tech-logos:hover {
+  animation-play-state: paused;
+}
+
+.home-tech-item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: white;
+  border-radius: 16px;
+  border: 2px solid rgb(229, 231, 235);
+  min-width: 100px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.home-tech-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--bay);
+}
+
+.home-tech-item img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.home-tech-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(31, 41, 55);
+  text-align: center;
 }
 
 .sidebar-btn {
@@ -389,11 +472,16 @@ section {
   overflow: hidden;
   margin-bottom: 40px;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
 }
 
 .modal-hero-image img {
   width: 100%;
-  height: auto;
+  max-height: 700px;
+  object-fit: contain;
   display: block;
 }
 
@@ -532,4 +620,156 @@ section {
   width: 100%;
   height: auto;
   display: block;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+  transform: scale(1.02);
+}
+
+/* Image Lightbox */
+.image-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-lightbox.active {
+  display: flex;
+  opacity: 1;
+}
+
+.lightbox-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lightbox-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  cursor: pointer;
+}
+
+#lightbox-image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-prev {
+  left: 40px;
+}
+
+.lightbox-next {
+  right: 40px;
+}
+
+.lightbox-counter {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 1rem;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+  .lightbox-content {
+    padding: 20px;
+  }
+
+  .lightbox-prev {
+    left: 10px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .lightbox-next {
+    right: 10px;
+    width: 50px;
+    height: 50px;
+  }
+
+  #lightbox-image {
+    max-width: 95%;
+    max-height: 85%;
+  }
 }

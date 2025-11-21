@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "TestFlight beta deployment and App Store submission pipeline",
         "Clean, intuitive interface design",
       ],
-      techStack: ["swift", "firebase", "bluetooth", "testflight", "wix"],
+      techStack: ["swift", "firebase", "bluetooth", "testflight"],
       demoVideo: "project-videos/hearlabs-demo.mp4",
       heroImage: "project-images/hearlabs-hero.png",
       galleryImages: [
@@ -75,14 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "Customizable hydration goals and reminders",
         "Beautiful data visualizations and progress tracking",
       ],
-      techStack: ["swift", "coreml", "swiftui", "firebase"],
-      demoVideo: "project-videos/sipandscroll-demo.mp4", // Add your video here
+      techStack: ["swift", "coreml", "gemini", "ultralytics"],
+      //   demoVideo: "project-videos/sipandscroll-demo.mp4", // Add your video here
       heroImage: "project-images/sipandscroll-hero.png",
       galleryImages: [
         "project-images/sipandscroll-1.png",
         "project-images/sipandscroll-2.png",
         "project-images/sipandscroll-3.png",
         "project-images/sipandscroll-4.png",
+        "project-images/sipandscroll-5.png",
       ],
     },
     faithfilter: {
@@ -107,13 +108,16 @@ document.addEventListener("DOMContentLoaded", () => {
         "openai",
         "supabase",
         "pinecone",
-        "digitalocean",
+        "digitalOcean",
       ],
       //   demoVideo: "project-videos/faithfilter-demo.mp4",
       heroImage: "project-images/faithfilter-hero.png",
       galleryImages: [
         "project-images/faithfilter-1.png",
         "project-images/faithfilter-2.png",
+        "project-images/faithfilter-3.png",
+        "project-images/faithfilter-4.png",
+        "project-images/faithfilter-5.png",
       ],
     },
   };
@@ -176,16 +180,19 @@ document.addEventListener("DOMContentLoaded", () => {
       modalGallerySection.style.display = "none";
     }
 
-    // Tech stack logos (placeholders for now)
-    modalTechLogos.innerHTML = project.techStack
+    // Tech stack logos - single row with seamless scroll
+    const techLogosHTML = project.techStack
       .map(
         (tech) => `
         <div class="tech-logo-item">
-          <img src="https://via.placeholder.com/48x48/e5e7eb/4a90c5?text=${tech[0].toUpperCase()}" alt="${tech}" />
+          <img src="tech-logos/${tech}.svg" alt="${tech}" onerror="this.onerror=null; this.src='tech-logos/${tech}.png'; this.onerror=function(){this.src='https://via.placeholder.com/48x48/e5e7eb/4a90c5?text=${tech[0].toUpperCase()}'}" />
+          <span class="tech-logo-name">${tech}</span>
         </div>
       `
       )
       .join("");
+    // Duplicate once for infinite scroll effect
+    modalTechLogos.innerHTML = techLogosHTML + techLogosHTML;
 
     // Demo video (if available)
     if (project.demoVideo) {
@@ -251,24 +258,166 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Tech stack carousel
-  const carouselPrev = modal.querySelector(".carousel-prev");
-  const carouselNext = modal.querySelector(".carousel-next");
-  let carouselPosition = 0;
+  // Tech stack auto-scroll (no manual controls needed)
 
-  carouselNext.addEventListener("click", () => {
-    const techLogosEl = document.getElementById("modal-tech-logos");
-    const maxScroll =
-      techLogosEl.scrollWidth - techLogosEl.parentElement.offsetWidth;
-    carouselPosition = Math.min(carouselPosition + 60, maxScroll);
-    techLogosEl.style.transform = `translateX(-${carouselPosition}px)`;
+  // Image Lightbox System
+  const lightbox = document.getElementById("image-lightbox");
+  const lightboxOverlay = lightbox.querySelector(".lightbox-overlay");
+  const lightboxClose = lightbox.querySelector(".lightbox-close");
+  const lightboxPrev = lightbox.querySelector(".lightbox-prev");
+  const lightboxNext = lightbox.querySelector(".lightbox-next");
+  const lightboxImage = document.getElementById("lightbox-image");
+  const lightboxCounter = document.getElementById("lightbox-counter");
+
+  let currentImages = [];
+  let currentImageIndex = 0;
+
+  function openLightbox(images, startIndex) {
+    currentImages = images;
+    currentImageIndex = startIndex;
+    showLightboxImage();
+    lightbox.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("active");
+    // Keep modal scroll locked (we're going back to modal, not closing it)
+    // Modal already has overflow: hidden set
+  }
+
+  function showLightboxImage() {
+    lightboxImage.src = currentImages[currentImageIndex];
+    lightboxCounter.textContent = `${currentImageIndex + 1} / ${
+      currentImages.length
+    }`;
+  }
+
+  function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+    showLightboxImage();
+  }
+
+  function prevImage() {
+    currentImageIndex =
+      (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+    showLightboxImage();
+  }
+
+  // Lightbox event listeners
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightboxOverlay.addEventListener("click", closeLightbox);
+  lightboxNext.addEventListener("click", (e) => {
+    e.stopPropagation();
+    nextImage();
+  });
+  lightboxPrev.addEventListener("click", (e) => {
+    e.stopPropagation();
+    prevImage();
   });
 
-  carouselPrev.addEventListener("click", () => {
-    const techLogosEl = document.getElementById("modal-tech-logos");
-    carouselPosition = Math.max(carouselPosition - 60, 0);
-    techLogosEl.style.transform = `translateX(-${carouselPosition}px)`;
+  // Click on lightbox content area (outside image) closes lightbox
+  lightbox.querySelector(".lightbox-content").addEventListener("click", (e) => {
+    // Only close if clicking directly on the content area, not on buttons or image
+    if (e.target === e.currentTarget) {
+      closeLightbox();
+    }
   });
+
+  // Prevent image from being selected/highlighted
+  lightboxImage.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+  });
+
+  // Keyboard navigation for lightbox
+  document.addEventListener("keydown", (e) => {
+    if (lightbox.classList.contains("active")) {
+      if (e.key === "Escape") {
+        closeLightbox();
+      } else if (e.key === "ArrowRight") {
+        nextImage();
+      } else if (e.key === "ArrowLeft") {
+        prevImage();
+      }
+    }
+  });
+
+  // Delegate click events for gallery images (since they're dynamically added)
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".gallery-item img")) {
+      const clickedImg = e.target;
+      const galleryItems = Array.from(
+        document.querySelectorAll(".gallery-item img")
+      );
+      const imageUrls = galleryItems.map((img) => img.src);
+      const clickedIndex = galleryItems.indexOf(clickedImg);
+      openLightbox(imageUrls, clickedIndex);
+    }
+  });
+
+  // Home Tech Stack Carousel
+  const homeTechLogos = document.getElementById("home-tech-logos");
+
+  if (homeTechLogos) {
+    // Curated tech stack showing breadth across web, mobile, AI, cloud
+    // Curated tech stack showing breadth across web, mobile, AI, cloud
+    const techStackList = [
+      // Modern Web Stack (most common startup need)
+      { name: "React", image: "tech-logos/react.png" },
+      { name: "Next.js", image: "tech-logos/nextjs.png" },
+
+      // Startup-Friendly Backend (easy to use, scalable)
+      { name: "Firebase", image: "tech-logos/firebase.svg" },
+      { name: "Supabase", image: "tech-logos/supabase.png" },
+
+      // AI/ML (hot & differentiating)
+      { name: "OpenAI", image: "tech-logos/openai.png" },
+      { name: "Gemini AI", image: "tech-logos/gemini.png" },
+      { name: "Pinecone", image: "tech-logos/pinecone.png" },
+
+      // Mobile (native iOS)
+      { name: "Swift", image: "tech-logos/swift.png" },
+
+      // Languages (shows versatility)
+      { name: "Python", image: "tech-logos/python.png" },
+      { name: "Java", image: "tech-logos/java.png" },
+
+      // Cloud & DevOps (credibility)
+      { name: "AWS", image: "tech-logos/aws.jpg" },
+      { name: "Google Cloud", image: "tech-logos/gcp.png" },
+      { name: "DigitalOcean", image: "tech-logos/digitalOcean.png" },
+      { name: "Docker", image: "tech-logos/docker.png" },
+      { name: "Kubernetes", image: "tech-logos/kubernetes.png" },
+
+      // Specialized (niche but impressive)
+      { name: "Bluetooth", image: "tech-logos/bluetooth.svg" },
+      { name: "CoreML", image: "tech-logos/coreml.png" },
+      { name: "Ultralytics", image: "tech-logos/ultralytics.png" },
+      { name: "Oracle Cloud", image: "tech-logos/oci.png" },
+    ];
+
+    // Duplicate the array twice to create seamless infinite scroll
+    const duplicatedTech = [...techStackList, ...techStackList];
+
+    // Render tech items
+    duplicatedTech.forEach((tech) => {
+      const techItem = document.createElement("div");
+      techItem.className = "home-tech-item";
+
+      const img = document.createElement("img");
+      img.src = tech.image;
+      img.alt = tech.name;
+      img.loading = "lazy";
+
+      const name = document.createElement("span");
+      name.className = "home-tech-name";
+      name.textContent = tech.name;
+
+      techItem.appendChild(img);
+      techItem.appendChild(name);
+      homeTechLogos.appendChild(techItem);
+    });
+  }
 
   console.log("Moonrise Bay Technologies loaded.");
 });
