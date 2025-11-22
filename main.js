@@ -383,11 +383,20 @@ document.addEventListener("DOMContentLoaded", () => {
       { name: "Java", image: "tech-logos/java.png" },
 
       // Cloud & DevOps (credibility)
-      { name: "AWS", image: "tech-logos/aws.jpg" },
+      { name: "AWS", image: "tech-logos/aws.png" },
       { name: "Google Cloud", image: "tech-logos/gcp.png" },
       { name: "DigitalOcean", image: "tech-logos/digitalOcean.png" },
       { name: "Docker", image: "tech-logos/docker.png" },
       { name: "Kubernetes", image: "tech-logos/kubernetes.png" },
+
+      { name: "PostgreSQL", image: "tech-logos/postgres.png" },
+      { name: "MySQL", image: "tech-logos/mysql.png" },
+      { name: "MongoDB", image: "tech-logos/mongodb.png" },
+      { name: "Redis", image: "tech-logos/redis.png" },
+      { name: "Elasticsearch", image: "tech-logos/elasticsearch.png" },
+      //   { name: "Kibana", image: "tech-logos/kibana.png" },
+      //   { name: "Logstash", image: "tech-logos/logstash.png" },
+      //   { name: "Fluentd", image: "tech-logos/fluentd.png" },
 
       // Specialized (niche but impressive)
       { name: "Bluetooth", image: "tech-logos/bluetooth.svg" },
