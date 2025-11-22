@@ -12,27 +12,102 @@ document.addEventListener("DOMContentLoaded", () => {
     }, index * 100);
   });
 
-  // Dynamic logo showcase on hover
+  // Dynamic logo showcase with mobile auto-rotation
   const companyLinks = document.querySelectorAll(".company-link");
   const featuredLogo = document.getElementById("featured-logo");
+  const visitSiteBtn = document.getElementById("visit-site-btn");
+  const isMobile = window.innerWidth <= 768;
 
-  companyLinks.forEach((link) => {
-    link.addEventListener("mouseenter", () => {
-      const logoSrc = link.getAttribute("data-logo");
-      const companyName = link.getAttribute("data-company");
+  // Build companies array
+  const companies = Array.from(companyLinks).map((link) => ({
+    name: link.getAttribute("data-company"),
+    logo: link.getAttribute("data-logo"),
+    url: link.href,
+    element: link,
+  }));
 
-      // Fade out, change, fade in
-      featuredLogo.style.opacity = "0";
-      featuredLogo.style.transform = "scale(0.8)";
+  // Function to show company logo and update button
+  function showCompanyLogo(index) {
+    const company = companies[index];
 
-      setTimeout(() => {
-        featuredLogo.src = logoSrc;
-        featuredLogo.alt = companyName + " logo";
-        featuredLogo.style.opacity = "1";
-        featuredLogo.style.transform = "scale(1)";
-      }, 200);
+    // Fade out
+    featuredLogo.style.opacity = "0";
+    featuredLogo.style.transform = "scale(0.9)";
+
+    setTimeout(() => {
+      // Update logo
+      featuredLogo.src = company.logo;
+      featuredLogo.alt = company.name + " logo";
+
+      // Update visit button URL
+      if (visitSiteBtn) {
+        visitSiteBtn.href = company.url;
+      }
+
+      // Fade in
+      featuredLogo.style.opacity = "1";
+      featuredLogo.style.transform = "scale(1)";
+
+      // Highlight active company name
+      companies.forEach((c) => c.element.classList.remove("active"));
+      company.element.classList.add("active");
+    }, 200);
+  }
+
+  if (isMobile) {
+    // Mobile: Auto-rotate with tap override
+    let currentIndex = 0;
+    let autoRotateInterval;
+    let resumeTimeout;
+
+    function startAutoRotate() {
+      // Clear any existing interval first
+      if (autoRotateInterval) {
+        clearInterval(autoRotateInterval);
+      }
+      
+      autoRotateInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % companies.length;
+        showCompanyLogo(currentIndex);
+      }, 2500); // Rotate every 2.5 seconds
+    }
+
+    // Tap to switch (prevent navigation on mobile)
+    companyLinks.forEach((link, index) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault(); // Don't navigate on tap
+        
+        // Clear existing interval and timeout
+        clearInterval(autoRotateInterval);
+        if (resumeTimeout) {
+          clearTimeout(resumeTimeout);
+        }
+        
+        // Update to selected company
+        currentIndex = index;
+        showCompanyLogo(index);
+
+        // Restart auto-rotation after 5 seconds from current selection
+        resumeTimeout = setTimeout(() => {
+          startAutoRotate();
+        }, 5000);
+      });
     });
-  });
+
+    // Initialize and start
+    showCompanyLogo(0);
+    startAutoRotate();
+  } else {
+    // Desktop: Hover behavior (click navigates)
+    companyLinks.forEach((link, index) => {
+      link.addEventListener("mouseenter", () => {
+        showCompanyLogo(index);
+      });
+    });
+
+    // Initialize first company
+    showCompanyLogo(0);
+  }
 
   // Project Modal System
   const projectData = {

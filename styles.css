@@ -141,6 +141,31 @@ section {
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
 }
 
+/* Visit Site Button */
+.visit-site-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--bay), var(--sunrise));
+  color: white;
+  text-decoration: none;
+  border-radius: 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0.95;
+  display: none; /* Hidden by default on desktop */
+}
+
+.visit-site-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 197, 0.4);
+  opacity: 1;
+}
+
 /* Company name links */
 .company-link {
   font-size: 1.25rem;
@@ -173,6 +198,16 @@ section {
 }
 
 .company-link:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.company-link.active {
+  color: var(--bay);
+  background: rgba(74, 144, 197, 0.12);
+  font-weight: 800;
+}
+
+.company-link.active::after {
   transform: translateX(-50%) scaleX(1);
 }
 
@@ -945,5 +980,34 @@ section {
   #lightbox-image {
     max-width: 95%;
     max-height: 85%;
+  }
+
+  /* Companies Section - Mobile Optimizations */
+  .logo-showcase {
+    height: 200px;
+    padding: 20px;
+  }
+
+  .featured-logo {
+    max-width: 300px;
+    max-height: 150px;
+  }
+
+  .visit-site-btn {
+    display: inline-block; /* Show on mobile */
+    top: 12px;
+    right: 12px;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+
+  .company-link {
+    font-size: 1.1rem;
+    padding: 10px 14px;
+  }
+
+  .company-link.active {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(74, 144, 197, 0.2);
   }
 }
