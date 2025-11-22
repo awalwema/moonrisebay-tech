@@ -260,8 +260,182 @@ section {
 }
 
 @media (max-width: 968px) {
+  /* Make close button sticky and more accessible */
+  .modal-close {
+    position: fixed; /* Stay visible while scrolling */
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+  }
+
   .modal-grid {
     grid-template-columns: 1fr;
+    height: auto;
+    max-height: 95vh;
+    overflow-y: auto; /* Single scroll for entire modal */
+  }
+
+  /* Compact sidebar - no scrolling */
+  .modal-sidebar {
+    overflow-y: visible;
+    overflow-x: visible;
+    padding: 20px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: linear-gradient(
+      135deg,
+      rgba(74, 144, 197, 0.05),
+      rgba(141, 186, 229, 0.03)
+    );
+  }
+
+  /* Tighter spacing for mobile */
+  .sidebar-section {
+    margin-bottom: 16px;
+  }
+
+  /* Company and Industry inline */
+  .sidebar-section:nth-child(1),
+  .sidebar-section:nth-child(2) {
+    display: inline-block;
+    margin-right: 16px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-label {
+    font-size: 0.65rem;
+    margin-bottom: 4px;
+  }
+
+  .sidebar-value {
+    font-size: 0.95rem;
+  }
+
+  /* Tech stack - horizontal scroll */
+  .tech-stack-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    mask-image: none;
+    -webkit-mask-image: none;
+    padding: 8px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .tech-stack-scroll::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .tech-stack-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 2px;
+  }
+
+  .tech-stack-scroll::-webkit-scrollbar-thumb {
+    background: rgba(74, 144, 197, 0.3);
+    border-radius: 2px;
+  }
+
+  .tech-logos {
+    animation: none; /* Disable auto-scroll on mobile */
+    gap: 12px;
+  }
+
+  .tech-logo-item {
+    min-width: 70px;
+    padding: 10px 14px;
+  }
+
+  .tech-logo-item img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tech-logo-name {
+    font-size: 0.7rem;
+  }
+
+  /* CTA button - keep visible */
+  .sidebar-btn {
+    margin-top: 16px;
+    padding: 14px 24px;
+    font-size: 0.95rem;
+  }
+
+  /* Main content - single scroll */
+  .modal-main {
+    padding: 24px 20px 40px;
+    overflow-y: visible; /* Parent handles scrolling */
+  }
+
+  .modal-title {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  /* Compact content sections */
+  .modal-description {
+    margin-bottom: 28px;
+  }
+
+  .modal-description h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+
+  .modal-description p,
+  .modal-description li {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .modal-description li {
+    padding-left: 20px;
+    margin-bottom: 6px;
+  }
+
+  /* Hero image */
+  .modal-hero-image {
+    margin-bottom: 24px;
+  }
+
+  .modal-hero-image img {
+    max-height: 400px;
+  }
+
+  /* Video section */
+  .modal-video-section {
+    margin-bottom: 28px;
+  }
+
+  .modal-video-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+
+  .project-video {
+    max-height: 400px;
+  }
+
+  /* Gallery */
+  .modal-gallery h3 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+
+  .gallery-grid {
+    gap: 12px;
+  }
+
+  .gallery-image {
+    height: 150px;
   }
 }
 
