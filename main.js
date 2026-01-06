@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     sipandscroll: {
       title: "💧 Sip & Scroll – Behavior Hydration App",
-      company: "Sip & Scroll",
+      company: "Moonrise Bay Technologies",
       industry: "Consumer Tech / Wellness",
       website: "https://sipandscroll.app/",
       overview:
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     tattoome: {
       title: "🎨 TattooMe – AI Tattoo Visualization App",
-      company: "TattooMe",
+      company: "Moonrise Bay Technologies",
       industry: "Consumer Tech / Creative Tools",
       website:
         "https://apps.apple.com/us/app/tatt-that-ai-tattoo-try-on/id6756681799",
