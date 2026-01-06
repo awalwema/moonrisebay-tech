@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (autoRotateInterval) {
         clearInterval(autoRotateInterval);
       }
-      
+
       autoRotateInterval = setInterval(() => {
         currentIndex = (currentIndex + 1) % companies.length;
         showCompanyLogo(currentIndex);
@@ -76,13 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
     companyLinks.forEach((link, index) => {
       link.addEventListener("click", (e) => {
         e.preventDefault(); // Don't navigate on tap
-        
+
         // Clear existing interval and timeout
         clearInterval(autoRotateInterval);
         if (resumeTimeout) {
           clearTimeout(resumeTimeout);
         }
-        
+
         // Update to selected company
         currentIndex = index;
         showCompanyLogo(index);
@@ -193,6 +193,32 @@ document.addEventListener("DOMContentLoaded", () => {
         "project-images/faithfilter-3.png",
         "project-images/faithfilter-4.png",
         "project-images/faithfilter-5.png",
+      ],
+    },
+    tattoome: {
+      title: "🎨 TattooMe – AI Tattoo Visualization App",
+      company: "TattooMe",
+      industry: "Consumer Tech / Creative Tools",
+      website:
+        "https://apps.apple.com/us/app/tatt-that-ai-tattoo-try-on/id6756681799",
+      overview:
+        "Founder-built iOS app that lets users preview realistic tattoos on their body before getting inked. Users select from 40+ designs across 9 categories, position them with intuitive multi-touch gestures, and receive AI-generated photorealistic results via Google Gemini. Features include before/after comparison with 4x zoom, custom sketch-to-tattoo conversion, and a credit-based monetization system with fraud prevention.",
+      features: [
+        "AI-powered photorealistic tattoo rendering using Google Gemini with multi-image prompting",
+        "Intuitive gesture system: drag, pinch-to-scale, and rotation handles with smooth filtering",
+        "Before/after comparison slider with 4x zoom for detailed inspection",
+        "40+ tattoo designs across 9 categories (Floral, Japanese, Cyber, Pixel Art, etc.)",
+        "Custom tattoo conversion: turn sketches or photos into clean tattoo designs",
+        "Credit-based monetization with StoreKit 2 and Keychain-backed reinstall fraud prevention",
+        "In-app support chat and privacy-first analytics with TelemetryDeck",
+      ],
+      techStack: ["swift", "gemini", "testflight"],
+      //   demoVideo: "project-videos/tattoome-demo.mp4",
+      heroImage: "project-images/tattoome-hero.png",
+      galleryImages: [
+        "project-images/tattoome-1.png",
+        "project-images/tattoome-2.png",
+        "project-images/tattoome-3.png",
       ],
     },
   };
