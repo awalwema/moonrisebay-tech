@@ -529,5 +529,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Sticky nav: show after scrolling past the hero
+  const siteNav = document.getElementById("site-nav");
+  const heroSection = document.querySelector("header");
+
+  if (siteNav && heroSection) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          siteNav.classList.remove("visible");
+        } else {
+          siteNav.classList.add("visible");
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(heroSection);
+  }
+
   console.log("Moonrise Bay Technologies loaded.");
 });
