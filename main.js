@@ -196,29 +196,77 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
     },
     tattoome: {
-      title: "🎨 TattooMe – AI Tattoo Visualization App",
+      title: "🎨 TattThat – AI Tattoo Try-On App",
       company: "Moonrise Bay Technologies",
-      industry: "Consumer Tech / Creative Tools",
+      industry: "Consumer Tech / Creative AI / Growth",
       website:
         "https://apps.apple.com/us/app/tatt-that-ai-tattoo-try-on/id6756681799",
       overview:
-        "Founder-built iOS app that lets users preview realistic tattoos on their body before getting inked. Users select from 40+ designs across 9 categories, position them with intuitive multi-touch gestures, and receive AI-generated photorealistic results via Google Gemini. Features include before/after comparison with 4x zoom, custom sketch-to-tattoo conversion, and a credit-based monetization system with fraud prevention.",
-      features: [
-        "AI-powered photorealistic tattoo rendering using Google Gemini with multi-image prompting",
-        "Intuitive gesture system: drag, pinch-to-scale, and rotation handles with smooth filtering",
-        "Before/after comparison slider with 4x zoom for detailed inspection",
-        "40+ tattoo designs across 9 categories (Floral, Japanese, Cyber, Pixel Art, etc.)",
-        "Custom tattoo conversion: turn sketches or photos into clean tattoo designs",
-        "Credit-based monetization with StoreKit 2 and Keychain-backed reinstall fraud prevention",
-        "In-app support chat and privacy-first analytics with TelemetryDeck",
+        "Founder-built iOS app and production AI backend that lets people preview healed-ink tattoo designs on their own body before booking an appointment. TattThat pairs a SwiftUI app with a FastAPI service, CDN-backed tattoo catalog, server-side AI generation, credit monetization, purchase verification, product analytics, and a TikTok-to-App-Store acquisition funnel that has driven 4.5M+ views.",
+      proofStats: [
+        {
+          icon: "tiktok",
+          value: "4.5M+",
+          label: "TikTok views",
+          detail: "Owned growth channel and demo funnel",
+        },
+        {
+          icon: "growth",
+          value: "10k",
+          label: "Followers",
+          detail: "Grown from zero in roughly 90 days",
+        },
+        {
+          icon: "appStore",
+          value: "4.9★",
+          label: "App Store",
+          detail: "Live iOS app with credit monetization",
+        },
+        {
+          icon: "catalog",
+          value: "300+",
+          label: "Design catalog",
+          detail: "320 live tattoo designs for try-ons",
+        },
       ],
-      techStack: ["swift", "gemini", "testflight"],
+      features: [
+        "Photorealistic healed-ink tattoo previews on real body photos using Gemini and FAL generation pipelines",
+        "SwiftUI placement canvas with drag, scale, rotation, before/after review, saved designs, and custom tattoo conversion",
+        "FastAPI backend on a self-hosted Hetzner VPS with async generation jobs, image processing, and CDN delivery",
+        "300+ design catalog with remote metadata, localized app-ready previews, search, browse, and trend-informed collections",
+        "StoreKit 2 purchase verification and credit ledger with reserve, charge, and release logic so users are never double-charged",
+        "14 releases in 5 months, localized in 9 languages, with product analytics and in-app support feedback loops",
+        "TikTok acquisition channel built around visual carousel demos, trend analysis, landing-page tracking, and App Store conversion",
+      ],
+      techStack: ["swift", "gemini", "python", "firebase", "testflight"],
       //   demoVideo: "project-videos/tattoome-demo.mp4",
-      heroImage: "project-images/tattoome-hero.png",
+      heroImage: "project-images/tattthat-store/01-try-on.png",
+      galleryMode: "slideshow",
       galleryImages: [
-        "project-images/tattoome-1.png",
-        "project-images/tattoome-2.png",
-        "project-images/tattoome-3.png",
+        {
+          src: "project-images/tattthat-store/01-try-on.png",
+          caption: "Try-on flow",
+        },
+        {
+          src: "project-images/tattthat-store/02-realistic.png",
+          caption: "Realistic healed-ink preview",
+        },
+        {
+          src: "project-images/tattthat-store/03-browse.png",
+          caption: "Browse the tattoo catalog",
+        },
+        {
+          src: "project-images/tattthat-store/04-create.png",
+          caption: "Create a custom design",
+        },
+        {
+          src: "project-images/tattthat-store/05-styles.png",
+          caption: "Explore styles and placements",
+        },
+        {
+          src: "project-images/tattthat-store/06-save.png",
+          caption: "Save and share favorites",
+        },
       ],
     },
   };
@@ -237,17 +285,164 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalOverview = document.getElementById("modal-overview");
   const modalFeatures = document.getElementById("modal-features");
   const modalHero = document.getElementById("modal-hero");
+  const modalProof = document.getElementById("modal-proof");
   const modalGallery = document.getElementById("modal-gallery");
   const modalGallerySection = modalGallery.closest(".modal-gallery");
+  const modalGallerySlideshow = document.getElementById("modal-gallery-slideshow");
+  const slideshowImage = document.getElementById("slideshow-image");
+  const slideshowImageButton = document.getElementById("slideshow-image-button");
+  const slideshowCaption = document.getElementById("slideshow-caption");
+  const slideshowCounter = document.getElementById("slideshow-counter");
+  const slideshowDots = document.getElementById("slideshow-dots");
+  const slideshowThumbnails = document.getElementById("slideshow-thumbnails");
+  const slideshowPrev = document.getElementById("slideshow-prev");
+  const slideshowNext = document.getElementById("slideshow-next");
   const modalTechLogos = document.getElementById("modal-tech-logos");
   const modalVideoSection = document.getElementById("modal-video-section");
   const modalVideo = document.getElementById("modal-video");
   const videoPlayOverlay = document.getElementById("video-play-overlay");
 
+  let slideshowImages = [];
+  let slideshowIndex = 0;
+  let slideshowTimer = null;
+
+  const proofIconMarkup = {
+    appStore: `
+      <span class="modal-proof-logo app-store-logo" aria-hidden="true">
+        <img src="project-images/logos/app-store.png" alt="" />
+      </span>
+    `,
+    tiktok: `
+      <span class="modal-proof-logo tiktok-logo" aria-hidden="true">
+        <img src="project-images/logos/tiktok.png" alt="" />
+      </span>
+    `,
+    growth: `
+      <span class="modal-proof-logo growth-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="img">
+          <path d="M4 17.5 9 12l3.5 3.5L20 7"></path>
+          <path d="M15 7h5v5"></path>
+        </svg>
+      </span>
+    `,
+    catalog: `
+      <span class="modal-proof-logo catalog-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="img">
+          <rect x="4" y="5" width="7" height="7" rx="1.5"></rect>
+          <rect x="13" y="5" width="7" height="7" rx="1.5"></rect>
+          <rect x="4" y="14" width="7" height="5" rx="1.5"></rect>
+          <rect x="13" y="14" width="7" height="5" rx="1.5"></rect>
+        </svg>
+      </span>
+    `,
+  };
+
+  function getProofIcon(icon) {
+    return proofIconMarkup[icon] || proofIconMarkup.growth;
+  }
+
+  function normalizeGalleryImage(image, index) {
+    if (typeof image === "string") {
+      return {
+        src: image,
+        caption: `Screenshot ${index + 1}`,
+      };
+    }
+
+    return {
+      src: image.src,
+      caption: image.caption || `Screenshot ${index + 1}`,
+    };
+  }
+
+  function stopSlideshow() {
+    if (slideshowTimer) {
+      clearInterval(slideshowTimer);
+      slideshowTimer = null;
+    }
+  }
+
+  function showSlide(index) {
+    if (slideshowImages.length === 0) return;
+
+    slideshowIndex =
+      (index + slideshowImages.length) % slideshowImages.length;
+    const slide = slideshowImages[slideshowIndex];
+
+    slideshowImage.src = slide.src;
+    slideshowImage.alt = slide.caption;
+    slideshowCaption.textContent = slide.caption;
+    slideshowCounter.textContent = `${slideshowIndex + 1} / ${
+      slideshowImages.length
+    }`;
+
+    slideshowDots
+      .querySelectorAll("button")
+      .forEach((dot, dotIndex) =>
+        dot.classList.toggle("active", dotIndex === slideshowIndex)
+      );
+    slideshowThumbnails
+      .querySelectorAll("button")
+      .forEach((thumb, thumbIndex) =>
+        thumb.classList.toggle("active", thumbIndex === slideshowIndex)
+      );
+  }
+
+  function nextSlide() {
+    showSlide(slideshowIndex + 1);
+  }
+
+  function prevSlide() {
+    showSlide(slideshowIndex - 1);
+  }
+
+  function startSlideshow() {
+    stopSlideshow();
+    if (slideshowImages.length <= 1) return;
+    slideshowTimer = setInterval(nextSlide, 4500);
+  }
+
+  function renderSlideshow(galleryImages) {
+    slideshowImages = galleryImages.map(normalizeGalleryImage);
+    slideshowIndex = 0;
+
+    slideshowDots.innerHTML = slideshowImages
+      .map(
+        (slide, index) => `
+        <button
+          type="button"
+          class="slideshow-dot"
+          aria-label="Show ${slide.caption}"
+          data-slide-index="${index}"
+        ></button>
+      `
+      )
+      .join("");
+
+    slideshowThumbnails.innerHTML = slideshowImages
+      .map(
+        (slide, index) => `
+        <button
+          type="button"
+          class="slideshow-thumbnail"
+          aria-label="Show ${slide.caption}"
+          data-slide-index="${index}"
+        >
+          <img src="${slide.src}" alt="${slide.caption}" loading="lazy" />
+        </button>
+      `
+      )
+      .join("");
+
+    showSlide(0);
+    startSlideshow();
+  }
+
   // Open modal
   function openModal(projectId) {
     const project = projectData[projectId];
     if (!project) return;
+    stopSlideshow();
 
     // Populate modal content
     modalTitle.textContent = project.title;
@@ -265,20 +460,54 @@ document.addEventListener("DOMContentLoaded", () => {
     modalHero.src = project.heroImage;
     modalHero.alt = project.title;
 
-    // Gallery (hide if no images)
-    if (project.galleryImages && project.galleryImages.length > 0) {
-      modalGallerySection.style.display = "block";
-      modalGallery.innerHTML = project.galleryImages
+    // Proof stats (if available)
+    if (project.proofStats && project.proofStats.length > 0) {
+      modalProof.style.display = "grid";
+      modalProof.innerHTML = project.proofStats
         .map(
-          (img, i) => `
-        <div class="gallery-item">
-          <img src="${img}" alt="Screenshot ${i + 1}" />
+          (stat) => `
+        <div class="modal-proof-item">
+          ${getProofIcon(stat.icon)}
+          <div>
+            <p class="modal-proof-value">${stat.value}</p>
+            <p class="modal-proof-label">${stat.label}</p>
+            <p class="modal-proof-detail">${stat.detail}</p>
+          </div>
         </div>
       `
         )
         .join("");
     } else {
+      modalProof.style.display = "none";
+      modalProof.innerHTML = "";
+    }
+
+    // Gallery (hide if no images)
+    if (project.galleryImages && project.galleryImages.length > 0) {
+      modalGallerySection.style.display = "block";
+      if (project.galleryMode === "slideshow") {
+        modalGallery.style.display = "none";
+        modalGallery.innerHTML = "";
+        modalGallerySlideshow.style.display = "block";
+        renderSlideshow(project.galleryImages);
+      } else {
+        modalGallery.style.display = "grid";
+        modalGallerySlideshow.style.display = "none";
+        modalGallery.innerHTML = project.galleryImages
+          .map(normalizeGalleryImage)
+          .map(
+            (img, i) => `
+        <div class="gallery-item">
+          <img src="${img.src}" alt="${img.caption || `Screenshot ${i + 1}`}" />
+        </div>
+      `
+          )
+          .join("");
+      }
+    } else {
       modalGallerySection.style.display = "none";
+      modalGallerySlideshow.style.display = "none";
+      modalGallery.innerHTML = "";
     }
 
     // Tech stack logos - single row with seamless scroll
@@ -315,6 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function closeModal() {
     modal.classList.remove("active");
     document.body.style.overflow = "";
+    stopSlideshow();
     // Pause and reset video
     if (modalVideo.src) {
       modalVideo.pause();
@@ -333,6 +563,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
   modalClose.addEventListener("click", closeModal);
   modalOverlay.addEventListener("click", closeModal);
+
+  slideshowPrev.addEventListener("click", () => {
+    prevSlide();
+    startSlideshow();
+  });
+
+  slideshowNext.addEventListener("click", () => {
+    nextSlide();
+    startSlideshow();
+  });
+
+  slideshowImageButton.addEventListener("click", () => {
+    if (slideshowImages.length > 0) {
+      openLightbox(
+        slideshowImages.map((slide) => slide.src),
+        slideshowIndex
+      );
+    }
+  });
+
+  modalGallerySlideshow.addEventListener("mouseenter", stopSlideshow);
+  modalGallerySlideshow.addEventListener("mouseleave", startSlideshow);
+
+  modalGallerySlideshow.addEventListener("click", (e) => {
+    const target = e.target.closest("[data-slide-index]");
+    if (!target) return;
+
+    showSlide(Number(target.getAttribute("data-slide-index")));
+    startSlideshow();
+  });
 
   // Video play button
   videoPlayOverlay.addEventListener("click", () => {

@@ -633,6 +633,51 @@
 
         <div class="space-y-10 mt-10">
           <div
+            class="project-card project-card-featured p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="tattoome"
+          >
+            <div class="flex items-center gap-3 flex-wrap mb-2">
+              <h3 class="subheading mb-0">
+                🎨 TattThat – AI Tattoo Try-On App
+              </h3>
+              <span
+                class="px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-[#4a90c5] to-[#f4a261] text-white"
+              >
+                Founder-Built
+              </span>
+              <span
+                class="px-3 py-1 text-xs font-semibold rounded-full bg-white text-[#2d5f8d] border border-[#4a90c5]/25"
+              >
+                Live on App Store
+              </span>
+            </div>
+            <p class="body-text">
+              iOS app and production AI backend for photorealistic tattoo
+              previews. Now live as TattThat with a 300+ design catalog, credit
+              monetization, and a TikTok funnel that has driven 4.5M+ views.
+            </p>
+            <div class="project-proof-strip" aria-label="TattThat traction">
+              <span class="project-proof-pill project-proof-pill-featured">
+                <span class="project-proof-logo tiktok-logo" aria-hidden="true">
+                  <img src="project-images/logos/tiktok.png" alt="" />
+                </span>
+                <span><strong>4.5M+</strong> views</span>
+              </span>
+              <span class="project-proof-pill"><strong>10k</strong> followers</span>
+              <span class="project-proof-pill">
+                <span class="project-proof-logo app-store-logo" aria-hidden="true">
+                  <img src="project-images/logos/app-store.png" alt="" />
+                </span>
+                <span><strong>4.9★</strong> App Store</span>
+              </span>
+              <span class="project-proof-pill"><strong>300+</strong> designs</span>
+            </div>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
+            </p>
+          </div>
+
+          <div
             class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
             data-project="hearlabs"
           >
@@ -686,29 +731,6 @@
             </p>
           </div>
 
-          <div
-            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
-            data-project="tattoome"
-          >
-            <div class="flex items-center gap-3 flex-wrap mb-2">
-              <h3 class="subheading mb-0">
-                🎨 TattooMe – AI Tattoo Visualization App
-              </h3>
-              <span
-                class="px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-[#4a90c5] to-[#f4a261] text-white"
-              >
-                Founder-Built
-              </span>
-            </div>
-            <p class="body-text">
-              iOS app that generates photorealistic tattoo previews using AI.
-              Features gesture-based positioning, before/after comparison, and
-              StoreKit monetization.
-            </p>
-            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
-              View Project Details →
-            </p>
-          </div>
         </div>
       </div>
     </section>
@@ -849,6 +871,10 @@
               />
             </div>
 
+            <div class="modal-proof-grid" id="modal-proof" style="display: none">
+              <!-- Optional project proof points will be inserted here -->
+            </div>
+
             <div class="modal-description">
               <h3>Project Overview</h3>
               <p id="modal-overview">Project description goes here...</p>
@@ -896,6 +922,40 @@
 
             <div class="modal-gallery">
               <h3>Gallery</h3>
+              <div class="gallery-slideshow" id="modal-gallery-slideshow" style="display: none">
+                <div class="slideshow-stage">
+                  <button
+                    class="slideshow-nav slideshow-prev"
+                    id="slideshow-prev"
+                    type="button"
+                    aria-label="Previous screenshot"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    class="slideshow-nav slideshow-next"
+                    id="slideshow-next"
+                    type="button"
+                    aria-label="Next screenshot"
+                  >
+                    ›
+                  </button>
+                  <button
+                    class="slideshow-image-button"
+                    id="slideshow-image-button"
+                    type="button"
+                    aria-label="Open screenshot"
+                  >
+                    <img id="slideshow-image" src="" alt="App screenshot" />
+                  </button>
+                </div>
+                <div class="slideshow-meta">
+                  <p class="slideshow-caption" id="slideshow-caption"></p>
+                  <p class="slideshow-counter" id="slideshow-counter">1 / 1</p>
+                </div>
+                <div class="slideshow-dots" id="slideshow-dots" aria-label="Screenshot navigation"></div>
+                <div class="slideshow-thumbnails" id="slideshow-thumbnails"></div>
+              </div>
               <div class="gallery-grid" id="modal-gallery">
                 <!-- Gallery images will be inserted here -->
               </div>
