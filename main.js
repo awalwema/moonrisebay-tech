@@ -442,6 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function openModal(projectId) {
     const project = projectData[projectId];
     if (!project) return;
+    window.mbTrack?.("project_open", { project: projectId });
     stopSlideshow();
 
     // Populate modal content
