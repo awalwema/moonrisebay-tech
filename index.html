@@ -64,65 +64,73 @@
             class="text-[#f4a261] hover:text-[#f5c27a] text-sm font-semibold transition-colors"
             >Hire Me — C2C</a
           >
-        </div>
-      </div>
-    </nav>
-
-    <!-- HERO -->
-    <header data-section="hero"
-      class="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-br from-[#1a1f3a] via-[#2d5f8d] to-[#4a90c5] text-white relative overflow-hidden"
-    >
-      <!-- Decorative background elements -->
-      <div
-        class="absolute -top-10 -right-10 w-72 h-72 bg-white/5 rounded-full blur-3xl pointer-events-none"
-      ></div>
-      <div
-        class="absolute -bottom-20 -left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"
-      ></div>
-
-      <div class="max-w-4xl mx-auto relative z-10">
-        <h1 class="text-4xl md:text-6xl font-bold leading-tight relative">
-          Moonrise Bay Technologies
-        </h1>
-
-        <p class="mt-6 text-lg md:text-xl text-gray-300">
-          AI, mobile, and web development for founders, teams, and agencies.
-          You'll see meaningful progress within the
-          <span class="font-bold text-[#f4a261] text-xl">first 72 hours</span> —
-          early demos, prototypes, or feature slices — with full timelines
-          aligned to scope.
-        </p>
-
-        <p class="mt-4 text-gray-200 max-w-2xl">
-          From MVPs to production systems — and available for
-          <a href="#contract" class="text-[#f4a261] hover:underline font-medium"
-            >C2C contracts &amp; agency partnerships</a
-          >.
-        </p>
-
-        <div class="mt-8 flex flex-col sm:flex-row gap-4 relative z-20">
           <a
             href="https://calendly.com/andrew-walwema/30min"
             target="_blank"
             rel="noopener noreferrer"
-            class="btn-primary relative z-30"
-            role="button"
-            aria-label="Schedule a 30-minute intro call"
+            class="nav-book"
+            >Book a call</a
           >
-            📅 Schedule a 30-Minute Call
-          </a>
         </div>
-
-        <p class="mt-6 text-sm text-gray-200">
-          Prefer email? Reach me at
-          <a
-            href="mailto:andrew@moonrisebay.tech"
-            class="text-bay hover:underline font-medium"
-          >
-            andrew@moonrisebay.tech
-          </a>
-        </p>
       </div>
+    </nav>
+
+    <!-- HERO: Moonrise Bay (animated presenter) -->
+    <header data-section="hero" class="bay-hero" id="hero">
+      <div class="bay-media" aria-hidden="true">
+        <video class="bay-video bay-intro" muted playsinline preload="auto" poster="character/hero/poster.webp">
+          <source src="character/hero/intro.mp4" type="video/mp4" />
+        </video>
+        <video class="bay-video bay-idle" muted playsinline loop preload="auto">
+          <source src="character/hero/idle.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div class="bay-inner">
+        <div class="bay-copy">
+          <p class="bay-eyebrow">Moonrise Bay Technologies</p>
+          <h1 class="bay-title">
+            AI, mobile &amp; web development for founders, teams &amp; agencies.
+          </h1>
+          <p class="bay-lede">
+            You'll see meaningful progress within the
+            <span class="font-bold text-[#f4a261]">first 72 hours</span>:
+            early demos, prototypes or feature slices, with full timelines
+            aligned to scope. Available for
+            <a href="#contract" class="text-[#f4a261] hover:underline font-medium"
+              >C2C contracts &amp; agency partnerships</a
+            >.
+          </p>
+          <div class="bay-ctas">
+            <a
+              href="https://calendly.com/andrew-walwema/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary"
+              aria-label="Schedule a 30-minute intro call"
+              >📅 Schedule a 30-Minute Call</a
+            >
+            <a href="#projects" class="btn-ghost">See my work</a>
+          </div>
+          <p class="bay-email">
+            Prefer email?
+            <a href="mailto:andrew@moonrisebay.tech" class="hover:underline font-medium"
+              >andrew@moonrisebay.tech</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Trust strip: proof above the fold -->
+      <ul class="trust-strip" aria-label="Credentials and clients">
+        <li><strong>Ex-Oracle</strong> cloud engineer</li>
+        <li><strong>Live</strong> on the App Store</li>
+        <li class="trust-clients">
+          Built with HearLabs · WeaVlog · Digital Events · FaithFilter · JJ Property Management
+        </li>
+      </ul>
+
+      <button type="button" class="bay-replay" id="bay-replay">↻ Replay</button>
     </header>
 
     <!-- WHAT I BUILD -->
@@ -966,6 +974,7 @@
     </div>
 
     <script src="analytics.js"></script>
+    <script src="hero-stage.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

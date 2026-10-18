@@ -1,6 +1,6 @@
 // Fade in sections on load
 document.addEventListener("DOMContentLoaded", () => {
-  const sections = document.querySelectorAll("section, header");
+  const sections = document.querySelectorAll("section, header:not(.bay-hero)");
   sections.forEach((section, index) => {
     section.style.opacity = "0";
     section.style.transform = "translateY(20px)";

@@ -1416,3 +1416,216 @@ section:not(#contract) {
     height: 91px;
   }
 }
+
+/* ===================== Hero: Moonrise Bay (animated presenter) ===================== */
+.bay-hero {
+  position: relative;
+  min-height: max(100svh, 640px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #fff;
+  background: #0d1430 url("character/hero/poster.webp") 30% center / cover no-repeat;
+}
+
+/* Video layer: intro plays once, then the idle loop takes over (hero-stage.js) */
+.bay-media {
+  position: absolute;
+  inset: 0;
+}
+
+.bay-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 30% center; /* on screens taller than 16:9, keep the dock post clear of the copy */
+}
+
+.bay-idle {
+  opacity: 0;
+  transition: opacity 0.4s ease; /* softens any intro → loop switch */
+}
+
+/* The loop fades in over the intro's final frame (they match). Never hide the intro first:
+   the hero background behind both is the opening frame and would flash through. */
+.bay-hero.is-idle .bay-idle {
+  opacity: 1;
+}
+
+/* Darken the open sky behind the copy so text always reads */
+.bay-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(8, 12, 32, 0.78) 0%, rgba(8, 12, 32, 0.55) 34%, rgba(8, 12, 32, 0) 58%),
+    linear-gradient(0deg, rgba(8, 12, 32, 0.75) 0%, rgba(8, 12, 32, 0) 22%);
+  pointer-events: none;
+}
+
+.bay-inner {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 110px 32px 40px;
+}
+
+.bay-copy {
+  max-width: 520px;
+}
+
+.bay-eyebrow {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sunrise);
+}
+
+.bay-title {
+  margin-top: 14px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2.1rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+}
+
+.bay-lede {
+  margin-top: 20px;
+  font-size: 1.12rem;
+  line-height: 1.6;
+  color: #dde4f0;
+}
+
+.bay-ctas {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.btn-ghost {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+  font-weight: 600;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.btn-ghost:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bay-email {
+  margin-top: 18px;
+  font-size: 0.9rem;
+  color: #c8d1e0;
+}
+
+.trust-strip {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 32px 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: 0.9rem;
+  color: #e6e0d6;
+}
+
+.trust-strip strong {
+  color: var(--sunrise);
+}
+
+.trust-clients {
+  color: #b9b3a8;
+}
+
+.bay-replay {
+  position: absolute;
+  right: 20px;
+  top: 84px;
+  z-index: 3;
+  font-size: 0.75rem;
+  color: #d6dce8;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 99px;
+  padding: 6px 12px;
+}
+
+/* Mobile: copy first on solid night sky, scene below as a full-width 16:9 window */
+@media (max-width: 768px) {
+  .bay-hero {
+    min-height: 0;
+    background: #0d1430;
+  }
+  .bay-inner {
+    order: 1;
+    padding: 96px 20px 24px;
+  }
+  .bay-media {
+    order: 2;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: url("character/hero/poster.webp") center / cover no-repeat;
+  }
+  .bay-media::after {
+    background: linear-gradient(0deg, rgba(8, 12, 32, 0.6) 0%, rgba(8, 12, 32, 0) 30%);
+  }
+  .bay-video {
+    object-position: center;
+  }
+  .trust-strip {
+    order: 3;
+    padding: 16px 20px 24px;
+  }
+  .bay-replay {
+    display: none;
+  }
+}
+
+/* Reduced motion: show the final scene as a still, no video */
+@media (prefers-reduced-motion: reduce) {
+  .bay-video {
+    display: none;
+  }
+  .bay-media {
+    background: url("character/hero/still.webp") 30% center / cover no-repeat;
+  }
+  .bay-replay {
+    display: none;
+  }
+}
+
+/* Nav booking pill */
+.nav-book {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--midnight);
+  background: var(--sunrise);
+  padding: 6px 14px;
+  border-radius: 99px;
+  transition: background 0.2s;
+}
+
+.nav-book:hover {
+  background: #f5c27a;
+}
