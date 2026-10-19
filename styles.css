@@ -1629,3 +1629,191 @@ section:not(#contract) {
 .nav-book:hover {
   background: #f5c27a;
 }
+
+/* ===================== Theme: one night at Moonrise Bay (night → sunrise as you scroll) ===================== */
+.theme-bay {
+  background: #0d1430;
+}
+
+/* The sky behind every section below the hero darkens into dusk, then breaks into sunrise at Contact */
+.theme-bay .bay-sky {
+  position: relative;
+  background: linear-gradient(
+    to bottom,
+    #0d1430 0%,
+    #111a42 22%,
+    #18214f 42%,
+    #252659 60%,
+    #3b2b62 76%,
+    #5f3566 90%,
+    #8a4363 100%
+  );
+}
+
+/* A faint star field that thins out as night ends */
+.theme-bay .bay-sky::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 45% 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 12% 8%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 38% 3%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 63% 11%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 84% 6%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 92% 18%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 22% 21%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 51% 27%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 7% 34%, rgba(255, 255, 255, 0.3), transparent);
+  background-size: 100% 1400px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+.theme-bay .bay-sky > section {
+  position: relative;
+}
+
+/* Night-time type */
+.theme-bay .section-title {
+  font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.theme-bay .bay-sky .section-title {
+  color: #f3efe8;
+}
+
+.theme-bay .bay-sky .subheading {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.theme-bay .bay-sky .subheading {
+  color: #f4f1ea;
+}
+
+.theme-bay .bay-sky .body-text,
+.theme-bay .bay-sky .text-gray-700,
+.theme-bay .bay-sky .text-gray-600 {
+  color: #c9d1e3;
+}
+
+.theme-bay .bay-sky .text-gray-800 {
+  color: #efe9df;
+}
+
+.theme-bay .bay-sky .text-gray-500,
+.theme-bay .bay-sky .text-gray-400 {
+  color: #a8b2c8;
+}
+
+.theme-bay .bay-sky strong {
+  color: #fff;
+}
+
+/* Cards become glass on the night sky */
+.theme-bay .bay-sky .skill-card,
+.theme-bay .bay-sky .project-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.theme-bay .bay-sky .skill-card:hover,
+.theme-bay .bay-sky .project-card:hover {
+  border-color: var(--sunrise);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+}
+
+.theme-bay .bay-sky .project-card-featured {
+  background: linear-gradient(135deg, rgba(244, 162, 97, 0.16) 0%, rgba(255, 255, 255, 0.05) 60%);
+  border-color: rgba(244, 162, 97, 0.35);
+}
+
+.theme-bay .bay-sky .project-proof-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #e8e4dc;
+  box-shadow: none;
+}
+
+.theme-bay .bay-sky .project-proof-pill strong {
+  color: #fff;
+}
+
+.theme-bay .bay-sky .text-\[\#4a90c5\] {
+  color: #8cc4ef;
+}
+
+/* Tech logos keep light tiles so dark logos (OpenAI, Vercel…) stay visible */
+.theme-bay .home-tech-item {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: transparent;
+}
+
+/* Testimonial: glass with a sunrise edge */
+.theme-bay .bay-sky blockquote {
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--sunrise);
+  box-shadow: none;
+}
+
+/* Contract keeps its content but drops its own navy panel so the sky shows through */
+.theme-bay #contract {
+  background: none !important;
+}
+
+/* Sunrise: Contact sits on a cream card so text reads whatever the sky is doing */
+.theme-bay .bay-sky section[data-section="contact"] {
+  background: linear-gradient(to bottom, #8a4363 0%, #c8625c 38%, #f08f5c 70%, #fbc98c 100%) !important;
+  padding-bottom: 120px;
+  overflow: hidden; /* the sun sits on the horizon, it doesn't spill into the footer */
+}
+
+.theme-bay .bay-sky section[data-section="contact"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -150px;
+  width: 560px;
+  height: 300px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 236, 190, 0.95), rgba(255, 214, 150, 0.4) 60%, transparent);
+  pointer-events: none;
+}
+
+.theme-bay .bay-sky section[data-section="contact"] > div {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  padding: 48px 32px;
+  border-radius: 24px;
+  background: #fff7ea;
+  box-shadow: 0 30px 60px -20px rgba(60, 20, 30, 0.45);
+}
+
+.theme-bay .bay-sky section[data-section="contact"] .section-title {
+  color: var(--midnight);
+}
+
+.theme-bay .bay-sky section[data-section="contact"] .text-gray-600 {
+  color: #5a4a40;
+}
+
+/* Morning: the footer is daylight */
+.theme-bay footer[data-section="footer"] {
+  background: linear-gradient(to bottom, #fbc98c, #fde6c0) !important;
+}
+
+.theme-bay footer[data-section="footer"] .text-gray-200,
+.theme-bay footer[data-section="footer"] .text-gray-400 {
+  color: #5a4535;
+}
+
+.theme-bay footer[data-section="footer"] .text-\[\#4a90c5\] {
+  color: #8a3f22;
+}

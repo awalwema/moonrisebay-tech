@@ -54,7 +54,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 200);
   }
 
-  if (isMobile) {
+  if (!companies.length || !featuredLogo) {
+    // Companies section not on the page (names live in the hero trust strip)
+  } else if (isMobile) {
     // Mobile: Auto-rotate with tap override
     let currentIndex = 0;
     let autoRotateInterval;

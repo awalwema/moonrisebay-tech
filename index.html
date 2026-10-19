@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
 
-  <body class="text-gray-900 antialiased">
+  <body class="text-gray-900 antialiased theme-bay">
     <!-- NAV -->
     <nav
       id="site-nav"
@@ -133,6 +133,7 @@
       <button type="button" class="bay-replay" id="bay-replay">↻ Replay</button>
     </header>
 
+    <div class="bay-sky">
     <!-- WHAT I BUILD -->
     <section data-section="what-i-build" id="what-i-build" class="py-20 px-6 md:px-12 lg:px-24">
       <div class="max-w-4xl mx-auto">
@@ -190,6 +191,115 @@
               <!-- Tech logos will be inserted here by JS -->
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section data-section="projects" id="projects" class="py-20 px-6 md:px-12 lg:px-24">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="section-title">Recent Projects</h2>
+
+        <div class="space-y-10 mt-10">
+          <div
+            class="project-card project-card-featured p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="tattoome"
+          >
+            <div class="flex items-center gap-3 flex-wrap mb-2">
+              <h3 class="subheading mb-0">
+                🎨 TattThat – AI Tattoo Try-On App
+              </h3>
+              <span
+                class="px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-[#4a90c5] to-[#f4a261] text-white"
+              >
+                Founder-Built
+              </span>
+              <span
+                class="px-3 py-1 text-xs font-semibold rounded-full bg-white text-[#2d5f8d] border border-[#4a90c5]/25"
+              >
+                Live on App Store
+              </span>
+            </div>
+            <p class="body-text">
+              iOS app and production AI backend for photorealistic tattoo
+              previews. Now live as TattThat with a 300+ design catalog, credit
+              monetization, and a TikTok funnel that has driven 4.5M+ views.
+            </p>
+            <div class="project-proof-strip" aria-label="TattThat traction">
+              <span class="project-proof-pill project-proof-pill-featured">
+                <span class="project-proof-logo tiktok-logo" aria-hidden="true">
+                  <img src="project-images/logos/tiktok.png" alt="" />
+                </span>
+                <span><strong>4.5M+</strong> views</span>
+              </span>
+              <span class="project-proof-pill"><strong>10k</strong> followers</span>
+              <span class="project-proof-pill">
+                <span class="project-proof-logo app-store-logo" aria-hidden="true">
+                  <img src="project-images/logos/app-store.png" alt="" />
+                </span>
+                <span><strong>4.9★</strong> App Store</span>
+              </span>
+              <span class="project-proof-pill"><strong>300+</strong> designs</span>
+            </div>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
+            </p>
+          </div>
+
+          <div
+            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="hearlabs"
+          >
+            <h3 class="subheading">🔊 HearLabs – Smart TV Audio iOS App</h3>
+            <p class="body-text">
+              Built an iOS app that streams TV audio directly to devices.
+              Implemented Bluetooth pairing, Firebase auth, and TestFlight
+              distribution.
+            </p>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
+            </p>
+          </div>
+
+          <div
+            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="sipandscroll"
+          >
+            <div class="flex items-center gap-3 flex-wrap mb-2">
+              <h3 class="subheading mb-0">
+                💧 Sip & Scroll – Behavior Hydration App
+              </h3>
+              <span
+                class="px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-[#4a90c5] to-[#f4a261] text-white"
+              >
+                Founder-Built
+              </span>
+            </div>
+            <p class="body-text">
+              iOS app using AI vision to verify "water selfies" before unlocking
+              social apps. Includes habit tracking and weekly insights.
+            </p>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
+            </p>
+          </div>
+
+          <div
+            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
+            data-project="faithfilter"
+          >
+            <h3 class="subheading">
+              🧠 FaithFilter – AI Media Discovery Platform
+            </h3>
+            <p class="body-text">
+              Built LLM-powered vector search, a content ingestion pipeline, and
+              a custom React admin dashboard for curators.
+            </p>
+            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
+              View Project Details →
+            </p>
+          </div>
+
         </div>
       </div>
     </section>
@@ -549,200 +659,6 @@
       </div>
     </section>
 
-    <!-- COMPANIES I'VE BUILT WITH -->
-    <section data-section="companies" class="py-16 px-6 md:px-12 lg:px-24">
-      <div class="max-w-4xl mx-auto text-center">
-        <p
-          class="text-sm uppercase tracking-wide text-gray-500 font-medium mb-8"
-        >
-          Companies I've Built With
-        </p>
-
-        <!-- Central Logo Display -->
-        <div class="logo-showcase mb-12">
-          <a
-            id="visit-site-btn"
-            href="https://www.hearlabs.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="visit-site-btn"
-            aria-label="Visit company website"
-          >
-            Visit Site →
-          </a>
-          <img
-            id="featured-logo"
-            src="logos/hearlabs.jpeg"
-            alt="Company logo"
-            class="featured-logo"
-          />
-        </div>
-
-        <!-- Company Names -->
-        <div class="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-          <a
-            href="https://www.hearlabs.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="company-link"
-            data-logo="logos/hearlabs.jpeg"
-            data-company="HearLabs"
-          >
-            HearLabs
-          </a>
-          <a
-            href="https://weavlog.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="company-link"
-            data-logo="logos/weavlog.png"
-            data-company="Weavlog"
-          >
-            WeaVlog
-          </a>
-          <a
-            href="https://digitaleventsinc.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="company-link"
-            data-logo="logos/digital_events.jpeg"
-            data-company="Digital Events"
-          >
-            Digital Events
-          </a>
-          <a
-            href="https://faithfilter.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="company-link"
-            data-logo="logos/FaithFilter.png"
-            data-company="FaithFilter"
-          >
-            FaithFilter
-          </a>
-          <a
-            href="https://jjpropertymgmt.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="company-link"
-            data-logo="logos/jjpropertymgmt.png"
-            data-company="JJ Property Management"
-          >
-            JJ Property Management
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section data-section="projects" id="projects" class="py-20 px-6 md:px-12 lg:px-24">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="section-title">Recent Projects</h2>
-
-        <div class="space-y-10 mt-10">
-          <div
-            class="project-card project-card-featured p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
-            data-project="tattoome"
-          >
-            <div class="flex items-center gap-3 flex-wrap mb-2">
-              <h3 class="subheading mb-0">
-                🎨 TattThat – AI Tattoo Try-On App
-              </h3>
-              <span
-                class="px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-[#4a90c5] to-[#f4a261] text-white"
-              >
-                Founder-Built
-              </span>
-              <span
-                class="px-3 py-1 text-xs font-semibold rounded-full bg-white text-[#2d5f8d] border border-[#4a90c5]/25"
-              >
-                Live on App Store
-              </span>
-            </div>
-            <p class="body-text">
-              iOS app and production AI backend for photorealistic tattoo
-              previews. Now live as TattThat with a 300+ design catalog, credit
-              monetization, and a TikTok funnel that has driven 4.5M+ views.
-            </p>
-            <div class="project-proof-strip" aria-label="TattThat traction">
-              <span class="project-proof-pill project-proof-pill-featured">
-                <span class="project-proof-logo tiktok-logo" aria-hidden="true">
-                  <img src="project-images/logos/tiktok.png" alt="" />
-                </span>
-                <span><strong>4.5M+</strong> views</span>
-              </span>
-              <span class="project-proof-pill"><strong>10k</strong> followers</span>
-              <span class="project-proof-pill">
-                <span class="project-proof-logo app-store-logo" aria-hidden="true">
-                  <img src="project-images/logos/app-store.png" alt="" />
-                </span>
-                <span><strong>4.9★</strong> App Store</span>
-              </span>
-              <span class="project-proof-pill"><strong>300+</strong> designs</span>
-            </div>
-            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
-              View Project Details →
-            </p>
-          </div>
-
-          <div
-            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
-            data-project="hearlabs"
-          >
-            <h3 class="subheading">🔊 HearLabs – Smart TV Audio iOS App</h3>
-            <p class="body-text">
-              Built an iOS app that streams TV audio directly to devices.
-              Implemented Bluetooth pairing, Firebase auth, and TestFlight
-              distribution.
-            </p>
-            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
-              View Project Details →
-            </p>
-          </div>
-
-          <div
-            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
-            data-project="sipandscroll"
-          >
-            <div class="flex items-center gap-3 flex-wrap mb-2">
-              <h3 class="subheading mb-0">
-                💧 Sip & Scroll – Behavior Hydration App
-              </h3>
-              <span
-                class="px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-[#4a90c5] to-[#f4a261] text-white"
-              >
-                Founder-Built
-              </span>
-            </div>
-            <p class="body-text">
-              iOS app using AI vision to verify "water selfies" before unlocking
-              social apps. Includes habit tracking and weekly insights.
-            </p>
-            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
-              View Project Details →
-            </p>
-          </div>
-
-          <div
-            class="project-card p-6 bg-gray-50 rounded-xl border border-gray-200 cursor-pointer"
-            data-project="faithfilter"
-          >
-            <h3 class="subheading">
-              🧠 FaithFilter – AI Media Discovery Platform
-            </h3>
-            <p class="body-text">
-              Built LLM-powered vector search, a content ingestion pipeline, and
-              a custom React admin dashboard for curators.
-            </p>
-            <p class="mt-4 text-sm text-[#4a90c5] font-medium">
-              View Project Details →
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
     <!-- ABOUT -->
     <section data-section="about" class="py-20 px-6 md:px-12 lg:px-24">
       <div class="max-w-4xl mx-auto">
@@ -796,6 +712,8 @@
         </p>
       </div>
     </section>
+
+    </div>
 
     <!-- FOOTER -->
     <footer data-section="footer"
