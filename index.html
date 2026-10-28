@@ -137,7 +137,21 @@
     <!-- WHAT I BUILD -->
     <section data-section="what-i-build" id="what-i-build" class="py-20 px-6 md:px-12 lg:px-24">
       <div class="max-w-4xl mx-auto">
-        <h2 class="section-title">What I Build</h2>
+        <div class="scene-row">
+          <div class="scene-copy">
+            <h2 class="section-title">What I Build</h2>
+            <p class="scene-lead">
+              From the first sketch to the shipped product: design, frontend,
+              backend and deployment, built end to end.
+            </p>
+          </div>
+          <!-- Scene: workbench on the dock. Plays once when scrolled into view, then loops (scenes.js) -->
+          <figure class="bay-scene" data-scene aria-hidden="true">
+            <img class="scene-still" src="character/build/poster.webp" data-still="character/build/still.webp" alt="" loading="lazy" width="1040" height="780" />
+            <video class="scene-intro" muted playsinline preload="none" data-src="character/build/intro.mp4"></video>
+            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/build/loop.mp4"></video>
+          </figure>
+        </div>
 
         <div class="grid md:grid-cols-2 gap-12 mt-10">
           <div
@@ -893,6 +907,7 @@
 
     <script src="analytics.js"></script>
     <script src="hero-stage.js"></script>
+    <script src="scenes.js"></script>
     <script src="main.js"></script>
   </body>
 </html>
