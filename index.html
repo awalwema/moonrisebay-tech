@@ -212,7 +212,21 @@
     <!-- PROJECTS -->
     <section data-section="projects" id="projects" class="py-20 px-6 md:px-12 lg:px-24">
       <div class="max-w-4xl mx-auto">
-        <h2 class="section-title">Recent Projects</h2>
+        <div class="scene-row">
+          <div class="scene-copy">
+            <h2 class="section-title">Recent Projects</h2>
+            <p class="scene-lead">
+              Shipped, live and in people's hands. Tap any project for the
+              full story, screenshots and demo.
+            </p>
+          </div>
+          <!-- Scene: boats moored at the dock. Plays once when scrolled into view, then loops (scenes.js) -->
+          <figure class="bay-scene" data-scene aria-hidden="true">
+            <img class="scene-still" src="character/projects/poster.webp" data-still="character/projects/still.webp" alt="" loading="lazy" width="1040" height="780" />
+            <video class="scene-intro" muted playsinline preload="none" data-src="character/projects/intro.mp4"></video>
+            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/projects/loop.mp4"></video>
+          </figure>
+        </div>
 
         <div class="space-y-10 mt-10">
           <div
