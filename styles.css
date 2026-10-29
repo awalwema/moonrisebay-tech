@@ -1786,7 +1786,31 @@ section:not(#contract) {
   pointer-events: none;
 }
 
-.theme-bay .bay-sky section[data-section="contact"] > div {
+/* Card beside the scene on desktop; on phones the card comes first so the CTA is never pushed down */
+.theme-bay .bay-sky section[data-section="contact"] .contact-row {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .theme-bay .bay-sky section[data-section="contact"] .contact-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The sunrise scene is brighter than the sky around it, so feather it all the way to the edges */
+.theme-bay .bay-sky section[data-section="contact"] .bay-scene {
+  -webkit-mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
+}
+
+.theme-bay .bay-sky section[data-section="contact"] .contact-card {
   position: relative;
   z-index: 1;
   max-width: 680px;
