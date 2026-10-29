@@ -399,28 +399,38 @@
       </div>
 
       <div class="max-w-4xl mx-auto relative z-10">
-        <!-- Section label -->
-        <div class="flex items-center gap-3 mb-6">
-          <span
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
-          >
-            <span
-              class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"
-            ></span>
-            Available for New Contracts
-          </span>
+        <div class="scene-row">
+          <div class="scene-copy">
+            <!-- Section label -->
+            <div class="flex items-center gap-3 mb-6">
+              <span
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
+              >
+                <span
+                  class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"
+                ></span>
+                Available for New Contracts
+              </span>
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-bold text-white leading-tight">
+              Open to Contract &amp;<br class="hidden sm:block" />
+              <span class="text-[#f4a261]">C2C Engagements</span>
+            </h2>
+
+            <p class="mt-4 text-gray-300 max-w-2xl leading-relaxed">
+              Moonrise Bay Technologies LLC is available for Corp-to-Corp (C2C)
+              contracts and agency partnerships. iOS, mobile, web, and AI automation
+              work — remote or NYC-area.
+            </p>
+          </div>
+          <!-- Scene: two open moorings at dawn. Plays once when scrolled into view, then loops (scenes.js) -->
+          <figure class="bay-scene" data-scene aria-hidden="true">
+            <img class="scene-still" src="character/contract/poster.webp" data-still="character/contract/still.webp" alt="" loading="lazy" width="1040" height="780" />
+            <video class="scene-intro" muted playsinline preload="none" data-src="character/contract/intro.mp4"></video>
+            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/contract/loop.mp4"></video>
+          </figure>
         </div>
-
-        <h2 class="text-3xl md:text-4xl font-bold text-white leading-tight">
-          Open to Contract &amp;<br class="hidden sm:block" />
-          <span class="text-[#f4a261]">C2C Engagements</span>
-        </h2>
-
-        <p class="mt-4 text-gray-300 max-w-2xl leading-relaxed">
-          Moonrise Bay Technologies LLC is available for Corp-to-Corp (C2C)
-          contracts and agency partnerships. iOS, mobile, web, and AI automation
-          work — remote or NYC-area.
-        </p>
 
         <!-- Two-column cards -->
         <div class="mt-10 grid md:grid-cols-2 gap-6">
