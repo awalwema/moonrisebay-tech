@@ -1,7 +1,7 @@
 // Hero: the intro clip (nap → phone buzz → tumble → ready) plays once, then a seamless idle loop.
-// The copy is plain HTML on top, so nothing waits on the video. The intro starts once the scene is
-// on screen (on phones it sits below the copy) and is only skipped once it has left the screen, so
-// the switch never happens in front of the visitor.
+// The copy is plain HTML, so nothing waits on the video. The intro starts once the scene is on
+// screen (right away, unless the page opened at a deep link) and is only skipped once it has left
+// the screen, so the switch never happens in front of the visitor.
 document.addEventListener("DOMContentLoaded", () => {
   const hero = document.getElementById("hero");
   if (!hero) return;

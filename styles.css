@@ -10,6 +10,7 @@
 
 /* Smooth scroll */
 html {
+  scrollbar-gutter: stable; /* locking scroll for the modal must not shift the page sideways */
   scroll-behavior: smooth;
 }
 
@@ -326,16 +327,15 @@ section:not(#contract) {
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: modalFadeIn 0.25s ease-out;
 }
 
-@keyframes modalSlideUp {
+/* Fade only: a scale or slide here carries the close button across the screen as it opens */
+@keyframes modalFadeIn {
   from {
-    transform: translateY(50px) scale(0.95);
     opacity: 0;
   }
   to {
-    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
@@ -1569,35 +1569,35 @@ section:not(#contract) {
   padding: 6px 12px;
 }
 
-/* Mobile: copy and proof first on solid night sky, then the scene. All the action sits in the right
-   of the 16:9 frame (the left is empty water for the desktop copy), so crop square and anchor right */
+/* Mobile: the video is the hook, so it leads, then copy and proof. All the action sits in the right of
+   the 16:9 frame (the left is empty water for the desktop copy), so crop square and anchor right */
 @media (max-width: 768px) {
   .bay-hero {
     min-height: 0;
     background: #0d1430;
   }
-  .bay-inner {
-    order: 1;
-    padding: 64px 20px 20px;
-  }
-  .trust-strip {
-    order: 2;
-    padding: 0 20px 20px;
-  }
   .bay-media {
-    order: 3;
+    order: 1;
     position: relative;
     inset: auto;
     width: 100%;
     aspect-ratio: 1 / 1;
-    max-height: 70svh;
+    max-height: 50svh;
     background: url("character/hero/poster.webp") 100% center / cover no-repeat;
   }
   .bay-media::after {
-    background: linear-gradient(0deg, rgba(8, 12, 32, 0.6) 0%, rgba(8, 12, 32, 0) 30%);
+    background: linear-gradient(0deg, #0d1430 0%, rgba(13, 20, 48, 0) 24%);
   }
   .bay-video {
     object-position: 100% center;
+  }
+  .bay-inner {
+    order: 2;
+    padding: 12px 20px 20px;
+  }
+  .trust-strip {
+    order: 3;
+    padding: 0 20px 24px;
   }
   .bay-replay {
     display: none;
@@ -1813,12 +1813,6 @@ section:not(#contract) {
   }
 }
 
-/* The sunrise scene is brighter than the sky around it, so feather it all the way to the edges */
-.theme-bay .bay-sky section[data-section="contact"] .bay-scene {
-  -webkit-mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
-  mask-image: radial-gradient(closest-side, #000 60%, transparent 100%);
-}
-
 .theme-bay .bay-sky section[data-section="contact"] .contact-card {
   position: relative;
   z-index: 1;
@@ -1835,6 +1829,93 @@ section:not(#contract) {
 
 .theme-bay .bay-sky section[data-section="contact"] .text-gray-600 {
   color: #5a4a40;
+}
+
+/* Project modal: a window onto the same night sky, not a white page dropped over it */
+.theme-bay .modal-overlay {
+  background: rgba(8, 12, 32, 0.8);
+}
+
+.theme-bay .modal-content {
+  background: linear-gradient(160deg, #1b2350 0%, #141a3a 55%, #2b2558 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.7);
+}
+
+.theme-bay .modal-sidebar,
+.theme-bay .modal-main,
+.theme-bay .modal-grid {
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.theme-bay .modal-sidebar {
+  background: rgba(255, 255, 255, 0.04);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-bay .sidebar-label {
+  color: #9fb0cf;
+}
+
+.theme-bay .sidebar-value,
+.theme-bay .modal-title,
+.theme-bay .modal-description h3,
+.theme-bay .modal-video-section h3,
+.theme-bay .modal-gallery h3,
+.theme-bay .modal-proof-label {
+  color: #fff;
+}
+
+.theme-bay .modal-description p,
+.theme-bay .modal-description li {
+  color: #c9d1e3;
+}
+
+.theme-bay .modal-description li::before {
+  color: var(--sunrise);
+}
+
+.theme-bay .modal-hero-image {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.55);
+}
+
+.theme-bay .modal-proof-item {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-bay .modal-proof-value {
+  color: var(--sunrise);
+}
+
+.theme-bay .modal-proof-detail {
+  color: #aab5cc;
+}
+
+.theme-bay .modal-close {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.theme-bay .modal-close:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.theme-bay .tech-logo-item {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: transparent;
+}
+
+.theme-bay .slideshow-caption {
+  color: #fff;
+}
+
+.theme-bay .slideshow-counter {
+  color: #aab5cc;
+}
+
+.theme-bay .slideshow-dot:not(.active) {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* Morning: the footer is daylight */
@@ -1871,9 +1952,15 @@ section:not(#contract) {
   position: relative;
   margin: 0;
   aspect-ratio: 4 / 3;
-  /* Soft oval edges so the scene melts into the night sky instead of sitting in a box */
-  -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 50%, #000 52%, transparent 100%);
-  mask-image: radial-gradient(ellipse 72% 70% at 50% 50%, #000 52%, transparent 100%);
+  /* Rounded corners with feathered edges, so the scene melts into the sky with no visible box */
+  border-radius: 32px;
+  overflow: hidden;
+  --fade-x: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+  --fade-y: linear-gradient(to bottom, transparent, #000 11%, #000 89%, transparent);
+  -webkit-mask-image: var(--fade-x), var(--fade-y);
+  mask-image: var(--fade-x), var(--fade-y);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
 .bay-scene img,
