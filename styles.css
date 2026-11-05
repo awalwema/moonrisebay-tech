@@ -1569,7 +1569,8 @@ section:not(#contract) {
   padding: 6px 12px;
 }
 
-/* Mobile: copy first on solid night sky, scene below as a full-width 16:9 window */
+/* Mobile: copy and proof first on solid night sky, then the scene. All the action sits in the right
+   of the 16:9 frame (the left is empty water for the desktop copy), so crop square and anchor right */
 @media (max-width: 768px) {
   .bay-hero {
     min-height: 0;
@@ -1577,25 +1578,26 @@ section:not(#contract) {
   }
   .bay-inner {
     order: 1;
-    padding: 96px 20px 24px;
+    padding: 64px 20px 20px;
+  }
+  .trust-strip {
+    order: 2;
+    padding: 0 20px 20px;
   }
   .bay-media {
-    order: 2;
+    order: 3;
     position: relative;
     inset: auto;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    background: url("character/hero/poster.webp") center / cover no-repeat;
+    aspect-ratio: 1 / 1;
+    max-height: 70svh;
+    background: url("character/hero/poster.webp") 100% center / cover no-repeat;
   }
   .bay-media::after {
     background: linear-gradient(0deg, rgba(8, 12, 32, 0.6) 0%, rgba(8, 12, 32, 0) 30%);
   }
   .bay-video {
-    object-position: center;
-  }
-  .trust-strip {
-    order: 3;
-    padding: 16px 20px 24px;
+    object-position: 100% center;
   }
   .bay-replay {
     display: none;
@@ -1615,8 +1617,15 @@ section:not(#contract) {
   }
 }
 
+@media (prefers-reduced-motion: reduce) and (max-width: 768px) {
+  .bay-media {
+    background-position: 100% center;
+  }
+}
+
 /* Nav booking pill */
 .nav-book {
+  white-space: nowrap;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--midnight);
