@@ -705,10 +705,52 @@ section:not(#contract) {
 }
 
 .home-tech-logos {
+  position: relative;
   display: flex;
   gap: 24px;
   width: max-content;
   animation: scroll-left 25s linear infinite;
+}
+
+/* He hops across the logos: tech-hop.js moves the track and bounces each logo */
+.tech-stage {
+  position: relative;
+}
+
+/* Headroom so he never reaches the text above at the top of a jump */
+@media (prefers-reduced-motion: no-preference) {
+  .tech-stage {
+    padding-top: 84px;
+  }
+}
+
+/* Phones: no room beside the label, so it becomes a caption under the logos */
+@media (prefers-reduced-motion: no-preference) and (max-width: 639px) {
+  .tech-stage {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tech-stage > p {
+    order: 2;
+    margin: 4px 0 0;
+  }
+}
+
+.tech-hopper {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.home-tech-logos.is-driven {
+  animation: none;
+  will-change: transform;
+}
+
+.home-tech-logos.is-driven .home-tech-item {
+  transform-origin: center bottom;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .home-tech-logos:hover {
