@@ -6,7 +6,8 @@
 // landing and springs back at takeoff. Hover the logos (tap on touch screens) and he sits down for a drink.
 //
 // The peek, in a project modal on desktop: once you start reading he stands up from below the sidebar's bottom
-// edge, rests his forearms on it and reads along, nodding now and then. Back at the top he ducks away to the logos.
+// edge, rests his forearms on it and reads along. He has one "ooh, I built that" moment, then props his chin on his
+// hand and quietly admires while you scroll. Back at the top he ducks away to the logos.
 //
 // Reduced motion keeps the plain carousels and no character.
 document.addEventListener("DOMContentLoaded", () => {
@@ -313,10 +314,15 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.setAttribute("aria-hidden", "true");
     const ctx = canvas.getContext("2d");
 
-    let state = "hidden"; // hidden | rising | reading | ducking
+    // Played in order once; the last one loops until he ducks, which runs them backwards
+    const PHASES = ["peekrise", "peekread", "peeksettle", "peekadmire"];
+    const BREATH = 0.006; // how much he swells with each breath while admiring
+    let state = "hidden"; // hidden | rising | ducking
+    let phase = 0;
     let pos = 0;
     let raf = 0;
     let last = 0;
+    let clock = 0;
     let shown = 0; // px of him above the edge
     let drawn = "";
     let loading = null;
@@ -333,6 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
       canvas.height = Math.round(cell.h * scale * dpr);
       canvas.style.width = `${cell.w * scale}px`;
       canvas.style.height = `${cell.h * scale}px`;
+      canvas.style.transformOrigin = `${cell.ledge[0] * scale}px ${cell.ledge[1] * scale}px`; // breathes from the ledge up
       const box = host.getBoundingClientRect();
       // Hands just short of the sidebar's right edge, forearms resting on the modal's bottom edge
       canvas.style.left = `${sidebar.getBoundingClientRect().right - box.left - cell.ledge[0] * scale - 14}px`;
@@ -343,39 +350,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tick = (time) => {
       raf = requestAnimationFrame(tick);
-      const dt = Math.max(0, Math.min((time - last) / 1000, 0.05)); // a frame's timestamp can predate start()
+      const dt = Math.max(0, Math.min((time - last) / 1000, 0.05)); // a frame's timestamp can predate run()
       last = time;
-      const rise = moves.peekrise;
-      const read = moves.peekread;
+      clock += dt;
 
-      let move = rise;
       if (state === "rising") {
-        pos += dt * RISE_FPS;
-        if (pos >= rise.steps.length) {
-          state = "reading";
-          pos = 0;
+        const move = moves[PHASES[phase]];
+        pos += dt * (phase === 0 ? RISE_FPS : move.fps);
+        if (pos >= move.steps.length) {
+          if (phase < PHASES.length - 1) {
+            phase++;
+            pos = 0;
+          } else pos %= move.steps.length;
         }
-      } else if (state === "ducking") {
+      } else {
         pos -= dt * DUCK_FPS;
-        if (pos <= 0) {
-          state = "hidden";
-          cancelAnimationFrame(raf);
-          raf = 0;
-          canvas.remove();
-          hopper.setAway(false);
-          return;
+        if (pos < 0) {
+          if (phase === 0) {
+            state = "hidden";
+            cancelAnimationFrame(raf);
+            raf = 0;
+            canvas.remove();
+            hopper.setAway(false);
+            return;
+          }
+          // Unwind: chin off his hand, then straight back down
+          phase = 0;
+          pos = moves[PHASES[phase]].steps.length - 1;
         }
       }
-      if (state === "reading") {
-        move = read;
-        pos = (pos + dt * read.fps) % read.steps.length;
-      }
 
-      // Coming up from below the edge over the first half of standing up
-      const up = state === "reading" ? 1 : Math.min(pos / (rise.steps.length * 0.5), 1);
+      // Coming up from below the edge over the first half of standing up; breathing once he's settled
+      const rise = moves.peekrise;
+      const up = phase > 0 ? 1 : Math.min(pos / (rise.steps.length * 0.5), 1);
       const y = (1 - (0.5 - Math.cos(up * Math.PI) / 2)) * shown;
-      canvas.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+      const breath = phase === 3 ? 1 + BREATH * Math.sin(clock * 1.6) : 1;
+      canvas.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0) scaleY(${breath.toFixed(4)})`;
 
+      const move = moves[PHASES[phase]];
       const f = move.steps[Math.min(Math.floor(pos), move.steps.length - 1)].f;
       const key = `${move.name}:${f}`;
       if (key === drawn) return;
@@ -391,22 +403,27 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const comeUp = async () => {
-      loading ??= Promise.all(["peekrise", "peekread"].map((name) => loadSheet(name, srcs[name])));
+      loading ??= Promise.all(PHASES.map((name) => loadSheet(name, srcs[name])));
       await loading;
       if (main.scrollTop <= READ_FROM || !fits()) return; // moved on while the frames loaded
       if (state === "hidden") {
         hopper.setAway(true);
         layout();
         host.appendChild(canvas);
+        phase = 0;
         pos = 0;
-      }
-      state = "rising";
+        state = "rising";
+      } else state = "rising"; // caught mid-duck: carry on forward from wherever he is
       run();
     };
 
     const goDown = () => {
-      if (state === "reading") pos = moves.peekrise.steps.length - 1;
       state = "ducking";
+      // Skip what isn't worth rewinding: the "ooh" goes straight to standing, the admiring straight to the unwind
+      if (phase === 1 || phase === 3) {
+        phase--;
+        pos = moves[PHASES[phase]].steps.length - 1;
+      }
       run();
     };
 
@@ -414,7 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "scroll",
       () => {
         if ((state === "hidden" || state === "ducking") && main.scrollTop > READ_FROM && fits()) comeUp();
-        else if ((state === "rising" || state === "reading") && main.scrollTop < DUCK_BELOW) goDown();
+        else if (state === "rising" && main.scrollTop < DUCK_BELOW) goDown();
       },
       { passive: true }
     );
