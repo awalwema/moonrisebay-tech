@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Empty sidebar below its last item, which is where he lives
     const room = () => sidebar.getBoundingClientRect().bottom - sidebar.lastElementChild.getBoundingClientRect().bottom - 24;
-    const fits = () => window.innerWidth > 968 && sidebar.scrollHeight <= sidebar.clientHeight && room() >= 110;
+    const fits = () => window.innerWidth > 968 && sidebar.scrollHeight <= sidebar.clientHeight && room() >= 90; // head and shoulders at least
 
     const layout = () => {
       shown = Math.min(170, room());
@@ -462,7 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
       scroller: modalStage.querySelector(".tech-stack-scroll"),
       track: modalStage.querySelector("#modal-tech-logos"),
       label: modalStage.querySelector(".tech-stage-label"),
-      height: () => (window.innerWidth < 640 ? 110 : 130),
+      height: () => (window.innerWidth < 640 ? 110 : 116),
     });
     const content = modalStage.closest(".modal-content");
     const peek = createPeek({

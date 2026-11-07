@@ -758,12 +758,23 @@ section:not(#contract) {
   .sidebar-section.tech-stage {
     display: flex;
     flex-direction: column;
-    padding-top: 124px;
+    padding-top: 108px;
   }
 
   .sidebar-section.tech-stage .tech-stage-label {
     order: 2;
     margin: 4px 0 0;
+  }
+}
+
+/* Desktop projects: a tighter sidebar leaves a free corner at the bottom for the peek, even on laptop screens */
+@media (prefers-reduced-motion: no-preference) and (min-width: 969px) {
+  .modal-sidebar {
+    padding-top: 40px;
+  }
+
+  .modal-sidebar .sidebar-section {
+    margin-bottom: 22px;
   }
 }
 
