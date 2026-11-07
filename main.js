@@ -538,15 +538,18 @@ document.addEventListener("DOMContentLoaded", () => {
       modalVideoSection.style.display = "none";
     }
 
-    // Show modal
+    // Show modal, from the top even if the last project was left scrolled (a hidden modal can't scroll, so after)
     modal.classList.add("active");
+    modal.querySelectorAll(".modal-main, .modal-grid, .modal-sidebar").forEach((el) => (el.scrollTop = 0));
     document.body.style.overflow = "hidden";
+    document.dispatchEvent(new CustomEvent("project-modal", { detail: { open: true } })); // cutout.js
   }
 
   // Close modal
   function closeModal() {
     modal.classList.remove("active");
     document.body.style.overflow = "";
+    document.dispatchEvent(new CustomEvent("project-modal", { detail: { open: false } }));
     stopSlideshow();
     // Pause and reset video
     if (modalVideo.src) {

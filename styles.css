@@ -712,15 +712,58 @@ section:not(#contract) {
   animation: scroll-left 25s linear infinite;
 }
 
-/* He hops across the logos: tech-hop.js moves the track and bounces each logo */
+/* He hops across the logos: cutout.js moves the track and bounces each logo */
 .tech-stage {
   position: relative;
+}
+
+.tech-hopper {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* He reads along from the bottom edge of a project (cutout.js); the modal's rounded clip hides his lower half */
+.peek-companion {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.is-driven {
+  animation: none !important;
+  will-change: transform;
+}
+
+.is-driven > * {
+  transform-origin: center bottom;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Room below for a pressed logo; the strip is his now, not a manual scroller */
+.is-hopping {
+  overflow: hidden !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
 }
 
 /* Headroom so he never reaches the text above at the top of a jump */
 @media (prefers-reduced-motion: no-preference) {
   .tech-stage {
     padding-top: 84px;
+  }
+
+  /* In a project the label sits under the logos, clear of him */
+  .sidebar-section.tech-stage {
+    display: flex;
+    flex-direction: column;
+    padding-top: 124px;
+  }
+
+  .sidebar-section.tech-stage .tech-stage-label {
+    order: 2;
+    margin: 4px 0 0;
   }
 }
 
@@ -731,26 +774,10 @@ section:not(#contract) {
     flex-direction: column;
   }
 
-  .tech-stage > p {
+  .tech-stage-label {
     order: 2;
     margin: 4px 0 0;
   }
-}
-
-.tech-hopper {
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.home-tech-logos.is-driven {
-  animation: none;
-  will-change: transform;
-}
-
-.home-tech-logos.is-driven .home-tech-item {
-  transform-origin: center bottom;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .home-tech-logos:hover {
