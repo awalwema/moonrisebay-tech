@@ -122,6 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
       count = items.length / 2;
       centers = items.slice(0, count).map((el) => el.offsetLeft + el.offsetWidth / 2);
       half = items[count].offsetLeft - items[0].offsetLeft;
+      // A strip wider than one set of logos, less the widest, would show repeats and run out before it wraps
+      scroller.style.maxWidth = `${half - Math.max(...items.slice(0, count).map((el) => el.offsetWidth))}px`;
       tileTop = scroller.offsetTop + parseFloat(getComputedStyle(scroller).paddingTop);
       tileHeight = items[0].offsetHeight;
 
@@ -161,10 +163,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return settled * Math.cos(u * 20) * Math.exp(-u * 6);
     };
 
-    const setPress = (n, d) => {
+    // Only the copy of logo n that's actually on screen under him moves; `copy` is null to let go of both
+    const setPress = (n, d, copy) => {
       const transform = d === null ? "" : `translateY(${d.toFixed(2)}px) scaleY(${(1 - d * SQUASH).toFixed(4)})`;
-      items[n % count].style.transform = transform;
-      items[(n % count) + count].style.transform = transform;
+      const base = n % count;
+      items[base].style.transform = copy === 0 ? transform : "";
+      items[base + count].style.transform = copy === 1 ? transform : "";
     };
 
     const pick = () => {
@@ -223,11 +227,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (air && !wasAir && presses.has(onTile)) presses.get(onTile).up = clock;
       if (!air && wasAir) presses.set(onTile, { down: clock, up: null });
       wasAir = air;
+      const lapsDone = Math.round((center - standX - wrapped) / half); // whole laps of the track behind us
       for (const [n, p] of presses) {
         if (p.up !== null && clock - p.up > 1) {
           presses.delete(n);
-          setPress(n, null);
-        } else setPress(n, press(p));
+          setPress(n, null, null);
+        } else setPress(n, press(p), Math.floor(n / count) - lapsDone);
       }
 
       // Him: ride the pressed logo on the ground, arc over the track when it moves
