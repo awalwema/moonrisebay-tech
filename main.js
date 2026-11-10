@@ -562,6 +562,67 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Swipe through a gallery on touch screens: the picture follows the finger, then slides out and the next one slides in.
+  // Short or mostly vertical drags spring back (vertical ones scroll the page as usual). A swipe never counts as a tap.
+  const swipeReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function addSwipe(surface, mover, { next, prev, onStart = () => {}, onEnd = () => {} }) {
+    let x0 = 0, y0 = 0, t0 = 0, dx = 0, axis = null, swiped = false;
+    const move = (x, ms = 0) => {
+      mover.style.transition = ms ? `transform ${ms}ms cubic-bezier(0.2, 0.8, 0.2, 1)` : "none";
+      mover.style.transform = x ? `translateX(${x}px)` : "";
+    };
+    surface.addEventListener("touchstart", (e) => {
+      if (e.touches.length !== 1) return;
+      ({ clientX: x0, clientY: y0 } = e.touches[0]);
+      t0 = performance.now();
+      dx = 0;
+      axis = null;
+      onStart();
+    }, { passive: true });
+    surface.addEventListener("touchmove", (e) => {
+      const { clientX, clientY } = e.touches[0];
+      const mx = clientX - x0, my = clientY - y0;
+      if (!axis && Math.hypot(mx, my) > 8) axis = Math.abs(mx) > Math.abs(my) ? "x" : "y";
+      if (axis !== "x") return;
+      e.preventDefault();
+      dx = mx;
+      if (!swipeReducedMotion) move(dx);
+    }, { passive: false });
+    const end = () => {
+      if (axis === "x") {
+        const width = surface.clientWidth;
+        const flick = Math.abs(dx) / (performance.now() - t0) > 0.45 && Math.abs(dx) > 30;
+        if (Math.abs(dx) > width * 0.18 || flick) {
+          const dir = dx < 0 ? 1 : -1; // 1 = next
+          swiped = true;
+          setTimeout(() => (swiped = false), 400);
+          if (swipeReducedMotion) {
+            (dir > 0 ? next : prev)();
+          } else {
+            move(-dir * width, 160);
+            setTimeout(() => {
+              (dir > 0 ? next : prev)();
+              move(dir * width);
+              requestAnimationFrame(() => requestAnimationFrame(() => move(0, 240)));
+            }, 160);
+          }
+        } else {
+          move(0, 220);
+        }
+      }
+      axis = null;
+      onEnd();
+    };
+    surface.addEventListener("touchend", end);
+    surface.addEventListener("touchcancel", end);
+    // The tap that ends a swipe must not open the picture or hit an arrow
+    surface.addEventListener("click", (e) => {
+      if (!swiped) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }, true);
+  }
+
   // Event listeners
   projectCards.forEach((card) => {
     card.addEventListener("click", () => {
@@ -590,6 +651,13 @@ document.addEventListener("DOMContentLoaded", () => {
         slideshowIndex
       );
     }
+  });
+
+  addSwipe(modalGallerySlideshow.querySelector(".slideshow-stage"), slideshowImageButton, {
+    next: nextSlide,
+    prev: prevSlide,
+    onStart: stopSlideshow,
+    onEnd: startSlideshow,
   });
 
   modalGallerySlideshow.addEventListener("mouseenter", stopSlideshow);
@@ -693,6 +761,8 @@ document.addEventListener("DOMContentLoaded", () => {
       closeLightbox();
     }
   });
+
+  addSwipe(lightbox.querySelector(".lightbox-content"), lightboxImage, { next: nextImage, prev: prevImage });
 
   // Prevent image from being selected/highlighted
   lightboxImage.addEventListener("mousedown", (e) => {
