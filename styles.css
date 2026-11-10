@@ -1639,18 +1639,6 @@ section:not(#contract) {
   color: #b9b3a8;
 }
 
-.bay-replay {
-  position: absolute;
-  right: 20px;
-  top: 84px;
-  z-index: 3;
-  font-size: 0.75rem;
-  color: #d6dce8;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 99px;
-  padding: 6px 12px;
-}
-
 /* Mobile: the video is the hook, so it leads, then copy and proof. All the action sits in the right of
    the 16:9 frame (the left is empty water for the desktop copy), so crop square and anchor right */
 @media (max-width: 768px) {
@@ -1681,9 +1669,6 @@ section:not(#contract) {
     order: 3;
     padding: 0 20px 24px;
   }
-  .bay-replay {
-    display: none;
-  }
 }
 
 /* Reduced motion: show the final scene as a still, no video */
@@ -1693,9 +1678,6 @@ section:not(#contract) {
   }
   .bay-media {
     background: url("character/hero/still.webp") 30% center / cover no-repeat;
-  }
-  .bay-replay {
-    display: none;
   }
 }
 

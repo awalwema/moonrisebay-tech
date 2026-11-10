@@ -440,6 +440,9 @@ document.addEventListener("DOMContentLoaded", () => {
     startSlideshow();
   }
 
+  // Logos in tech-logos/ that are SVG; everything else is PNG
+  const SVG_LOGOS = new Set(["bluetooth", "firebase"]);
+
   // Open modal
   function openModal(projectId) {
     const project = projectData[projectId];
@@ -513,12 +516,12 @@ document.addEventListener("DOMContentLoaded", () => {
       modalGallery.innerHTML = "";
     }
 
-    // Tech stack logos - single row with seamless scroll
+    // Tech stack logos - single row with seamless scroll (PNG unless listed in SVG_LOGOS)
     const techLogosHTML = project.techStack
       .map(
         (tech) => `
         <div class="tech-logo-item">
-          <img src="tech-logos/${tech}.svg" alt="${tech}" onerror="this.onerror=null; this.src='tech-logos/${tech}.png'; this.onerror=function(){this.src='https://via.placeholder.com/48x48/e5e7eb/4a90c5?text=${tech[0].toUpperCase()}'}" />
+          <img src="tech-logos/${tech}.${SVG_LOGOS.has(tech) ? "svg" : "png"}" alt="${tech}" onerror="this.remove()" />
           <span class="tech-logo-name">${tech}</span>
         </div>
       `

@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const media = hero.querySelector(".bay-media");
   const intro = hero.querySelector(".bay-intro");
   const idle = hero.querySelector(".bay-idle");
-  const replay = document.getElementById("bay-replay");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reducedMotion || !media || !intro || !idle) return; // CSS shows the still scene instead
 
@@ -72,10 +71,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("visibilitychange", () => {
     if (introDone && !document.hidden && heroVisible) idle.play().catch(() => {});
-  });
-
-  replay?.addEventListener("click", () => {
-    window.scrollTo({ top: 0 });
-    playIntro();
   });
 });
