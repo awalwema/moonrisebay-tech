@@ -1530,9 +1530,22 @@ section:not(#contract) {
   transition: opacity 0.4s ease; /* softens any intro → loop switch */
 }
 
+/* Video refused (Low Power Mode): he is shown awake, the loop fades in over that still after a tap */
+.bay-hero.no-intro .bay-intro {
+  display: none;
+}
+.bay-hero.no-intro .bay-media {
+  background: #0d1430 url("character/hero/still.webp") 30% center / cover no-repeat;
+}
+@media (max-width: 768px) {
+  .bay-hero.no-intro .bay-media {
+    background-position: 100% center;
+  }
+}
+
 /* The loop fades in over the intro's final frame (they match). Never hide the intro first:
    the hero background behind both is the opening frame and would flash through. */
-.bay-hero.is-idle .bay-idle {
+.bay-hero.is-idle.idle-live .bay-idle {
   opacity: 1;
 }
 

@@ -28,19 +28,34 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
 
-    // Loop fades in over the intro's last frame (they match), the intro stays underneath
+    // Video refused until a tap (Low Power Mode): show the finished scene, never a frozen first frame
+    const showStill = () => {
+      if (still?.dataset.still) still.src = still.dataset.still;
+    };
+    // Loop playback; a refused loop waits on the still and starts on the next tap (paused again if off screen by then)
+    const playLoop = () =>
+      window.mbMotion.play(loop, {
+        onBlocked: showStill,
+        onTap: () => loop.play().then(() => visible || loop.pause(), () => {}),
+      });
+
+    // Loop fades in over the intro's last frame (they match), the intro stays underneath.
+    // It only shows once it is actually playing, so a refused loop never covers the still with a blank frame.
+    loop.addEventListener("playing", () => scene.classList.add("is-looping"), { once: true });
     const toLoop = () => {
       if (looping) return;
       looping = true;
       loop.currentTime = 0;
-      if (visible && !document.hidden) loop.play().catch(() => {});
-      scene.classList.add("is-looping");
+      if (visible && !document.hidden) playLoop();
     };
 
     const start = () => {
       if (started || document.hidden) return;
       started = true;
-      intro.play().catch(toLoop); // if playback is refused, settle straight into the loop
+      intro.play().catch(() => {
+        showStill(); // refused: settle on the finished scene, and go straight to the loop
+        toLoop();
+      });
     };
 
     // Show the intro only once it is actually playing, so the still never flashes to an empty frame
@@ -60,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (visible) {
           load();
           if (!started) start();
-          else if (looping) loop.play().catch(() => {});
+          else if (looping) playLoop();
         } else if (looping) {
           loop.pause();
         }
@@ -71,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) return;
       if (visible && !started) start();
-      else if (visible && looping) loop.play().catch(() => {});
+      else if (visible && looping) playLoop();
     });
   });
 });
