@@ -5,9 +5,12 @@
 // over two. The track moves only while he's airborne, so his feet never slide, and the logo under him squashes on
 // landing and springs back at takeoff. Hover the logos (tap on touch screens) and he sits down for a drink.
 //
-// The peek, in a project modal on desktop: once you start reading he stands up from below the sidebar's bottom
-// edge, rests his forearms on it and reads along. He has one "ooh, I built that" moment, then props his chin on his
-// hand and quietly admires while you scroll. Back at the top he ducks away to the logos.
+// The peek, in a project modal: once you start reading he stands up from below the modal's bottom edge, rests his
+// forearms on it and reads along. He has one "ooh, I built that" moment, then props his chin on his hand and quietly
+// admires while you scroll. On desktop he lives under the sidebar and ducks back to the logos at the top; on phones
+// and tablets (one column) he is smaller and mirrored in the bottom-right corner (over the ragged ends of lines, not
+// their starts, looking back at the text), comes up once the tech stack has scrolled away, and ducks when it comes
+// back or when you reach the end, so he never sits on the last lines.
 //
 // Reduced motion keeps the plain carousels and no character.
 document.addEventListener("DOMContentLoaded", () => {
@@ -309,9 +312,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return { start, stop, reset, setAway };
   };
 
-  const createPeek = ({ host, sidebar, main, hopper }) => {
-    const READ_FROM = 160; // px into the project before he comes up to read
-    const DUCK_BELOW = 60; // px from the top where he goes back to the logos
+  const createPeek = ({ host, sidebar, main, grid, stage, hopper }) => {
+    const READ_FROM = 160; // desktop: px into the project before he comes up to read
+    const DUCK_BELOW = 60; // desktop: px from the top where he goes back to the logos
+    const CORNER = { shown: 76, margin: 10, endRoom: 140 }; // one column: px of him above the edge, from the right, kept clear at the end
+    const VISIBLE_LEFT = 84; // leftmost opaque px of the peek frames above the ledge (he faces right, hands at the ledge)
     const RISE_FPS = 24;
     const DUCK_FPS = 40;
     const canvas = document.createElement("canvas");
@@ -332,24 +337,37 @@ document.addEventListener("DOMContentLoaded", () => {
     let drawn = "";
     let loading = null;
 
-    // Empty sidebar below its last item, which is where he lives
+    // Desktop: empty sidebar below its last item, which is where he lives
     const room = () => sidebar.getBoundingClientRect().bottom - sidebar.lastElementChild.getBoundingClientRect().bottom - 24;
-    const fits = () => window.innerWidth > 968 && sidebar.scrollHeight <= sidebar.clientHeight && room() >= 90; // head and shoulders at least
+    const sideBySide = () => window.innerWidth > 968;
+    const fits = () => sidebar.scrollHeight <= sidebar.clientHeight && room() >= 90; // head and shoulders at least
+
+    // One column: up once the tech stack (and its hopper) is off the top, down again near the end
+    const stackGone = (slack = 0) => stage.getBoundingClientRect().bottom < host.getBoundingClientRect().top + slack;
+    const nearEnd = () => grid.scrollHeight - grid.scrollTop - grid.clientHeight < CORNER.endRoom;
+
+    const wantsUp = () => (sideBySide() ? main.scrollTop > READ_FROM && fits() : stackGone() && !nearEnd());
+    const wantsDown = () => (sideBySide() ? main.scrollTop < DUCK_BELOW : !stackGone(40) || nearEnd());
 
     const layout = () => {
-      shown = Math.min(170, room());
+      const corner = !sideBySide();
+      shown = corner ? CORNER.shown : Math.min(170, room());
       const scale = shown / cell.ledge[1];
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(cell.w * scale * dpr);
       canvas.height = Math.round(cell.h * scale * dpr);
       canvas.style.width = `${cell.w * scale}px`;
       canvas.style.height = `${cell.h * scale}px`;
-      canvas.style.transformOrigin = `${cell.ledge[0] * scale}px ${cell.ledge[1] * scale}px`; // breathes from the ledge up
+      canvas.style.transformOrigin = `0 ${cell.ledge[1] * scale}px`; // breathes from the ledge up
       const box = host.getBoundingClientRect();
-      // Hands just short of the sidebar's right edge, forearms resting on the modal's bottom edge
-      canvas.style.left = `${sidebar.getBoundingClientRect().right - box.left - cell.ledge[0] * scale - 14}px`;
+      // Forearms on the modal's bottom edge: hands just short of the sidebar's right edge, or mirrored into the
+      // bottom-right corner (his far side then sits `margin` from the edge)
+      canvas.style.left = corner
+        ? `${box.width - CORNER.margin - (cell.w - VISIBLE_LEFT) * scale}px`
+        : `${sidebar.getBoundingClientRect().right - box.left - cell.ledge[0] * scale - 14}px`;
       canvas.style.top = `${box.height - cell.ledge[1] * scale - 6}px`;
-      ctx.setTransform(canvas.width / cell.w, 0, 0, canvas.height / cell.h, 0, 0);
+      const sx = canvas.width / cell.w;
+      ctx.setTransform(corner ? -sx : sx, 0, 0, canvas.height / cell.h, corner ? canvas.width : 0, 0);
       drawn = "";
     };
 
@@ -410,7 +428,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const comeUp = async () => {
       loading ??= Promise.all(PHASES.map((name) => loadSheet(name, srcs[name])));
       await loading;
-      if (main.scrollTop <= READ_FROM || !fits()) return; // moved on while the frames loaded
+      if (!wantsUp()) return; // moved on while the frames loaded
       if (state === "hidden") {
         hopper.setAway(true);
         layout();
@@ -432,14 +450,13 @@ document.addEventListener("DOMContentLoaded", () => {
       run();
     };
 
-    main.addEventListener(
-      "scroll",
-      () => {
-        if ((state === "hidden" || state === "ducking") && main.scrollTop > READ_FROM && fits()) comeUp();
-        else if (state === "rising" && main.scrollTop < DUCK_BELOW) goDown();
-      },
-      { passive: true }
-    );
+    // Desktop scrolls the main column, one column scrolls the whole grid
+    const onScroll = () => {
+      if ((state === "hidden" || state === "ducking") && wantsUp()) comeUp();
+      else if (state === "rising" && wantsDown()) goDown();
+    };
+    main.addEventListener("scroll", onScroll, { passive: true });
+    grid.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", () => state !== "hidden" && layout());
 
     // A new project or a closed modal: gone at once, back on the logos
@@ -491,6 +508,8 @@ document.addEventListener("DOMContentLoaded", () => {
       host: content,
       sidebar: content.querySelector(".modal-sidebar"),
       main: content.querySelector(".modal-main"),
+      grid: content.querySelector(".modal-grid"),
+      stage: modalStage,
       hopper,
     });
     document.addEventListener("project-modal", async ({ detail }) => {
