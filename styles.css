@@ -2046,6 +2046,145 @@ section:not(#contract) {
   }
 }
 
+/* Send a Note dialog */
+.note-dialog {
+  width: min(460px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: linear-gradient(160deg, #1f2647 0%, #1a1f3a 70%);
+  color: #fef9f3;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(244, 162, 97, 0.08);
+}
+.note-dialog::backdrop {
+  background: rgba(10, 12, 28, 0.7);
+  backdrop-filter: blur(4px);
+}
+.note-dialog[open] {
+  animation: modalFadeIn 0.22s ease-out;
+}
+.note-form,
+.note-done {
+  position: relative;
+  padding: 28px 24px 22px;
+}
+.note-dialog h3 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.note-sub,
+.note-done p {
+  margin: 4px 0 18px;
+  color: rgba(254, 249, 243, 0.65);
+  font-size: 0.9rem;
+}
+.note-done strong {
+  color: #f4a261;
+  font-weight: 500;
+}
+.note-form label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(254, 249, 243, 0.75);
+}
+.note-form input,
+.note-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fef9f3;
+  font: inherit;
+  font-size: 16px; /* 16px stops iOS zooming in on focus */
+  resize: vertical;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.note-form input:focus,
+.note-form textarea:focus {
+  outline: none;
+  border-color: #f4a261;
+  box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.2);
+}
+.note-trap {
+  position: absolute !important;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.note-status {
+  min-height: 1.25em;
+  margin: -4px 0 10px;
+  font-size: 0.85rem;
+}
+.note-status.is-error {
+  color: #f6a58f;
+}
+.note-status a {
+  color: #f4a261;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.note-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.note-send,
+.note-cancel {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.note-send {
+  background: #f4a261;
+  color: #fff;
+}
+.note-send:hover:not(:disabled) {
+  background: #f5b27a;
+}
+.note-send:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+.note-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(254, 249, 243, 0.75);
+}
+.note-cancel:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+.note-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: rgba(254, 249, 243, 0.6);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.note-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .note-dialog[open] {
+    animation: none;
+  }
+}
+
 /* Morning: the footer is daylight */
 .theme-bay footer[data-section="footer"] {
   background: linear-gradient(to bottom, #fbc98c, #fde6c0) !important;

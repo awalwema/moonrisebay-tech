@@ -643,6 +643,7 @@
               </a>
               <a
                 href="mailto:andrew@moonrisebay.tech?subject=Agency%20Partnership"
+                data-note="Agency partnership"
                 class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-white/15 hover:border-white/30 text-gray-300 hover:text-white text-sm font-medium transition-colors"
               >
                 <svg
@@ -912,10 +913,33 @@
       </div>
     </div>
 
+    <!-- Send a Note: goes to Andrew's Telegram (note.js); the link's mailto stays the fallback -->
+    <dialog class="note-dialog" id="note-dialog" aria-labelledby="note-title">
+      <form class="note-form" method="dialog" novalidate>
+        <button type="button" class="note-close" data-note-close aria-label="Close">&times;</button>
+        <h3 id="note-title">Send a note</h3>
+        <p class="note-sub">It comes straight to my phone. I usually reply within a day.</p>
+        <label>Name<input name="name" autocomplete="name" maxlength="100" required /></label>
+        <label>Email<input name="email" type="email" autocomplete="email" maxlength="200" required /></label>
+        <label>Message<textarea name="message" rows="5" maxlength="4000" required></textarea></label>
+        <label class="note-trap" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+        <p class="note-status" role="status" aria-live="polite"></p>
+        <div class="note-actions">
+          <button type="button" class="note-cancel" data-note-close>Cancel</button>
+          <button type="submit" class="note-send">Send note</button>
+        </div>
+      </form>
+      <div class="note-done" hidden>
+        <h3>Sent, thank you</h3>
+        <p>I'll get back to you at <strong class="note-done-email"></strong>.</p>
+        <div class="note-actions"><button type="button" class="note-send" data-note-close>Close</button></div>
+      </div>
+    </dialog>
     <script src="analytics.js"></script>
     <script src="hero-stage.js"></script>
     <script src="scenes.js"></script>
     <script src="main.js"></script>
     <script src="cutout.js"></script>
+    <script src="note.js"></script>
   </body>
 </html>

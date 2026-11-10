@@ -33,7 +33,7 @@ function linkEvent(href) {
 
 document.addEventListener("click", (e) => {
   const link = e.target.closest("a[href]");
-  if (!link) return;
+  if (!link || link.hasAttribute("data-note")) return; // note.js reports the note form itself
   const href = link.getAttribute("href");
   const event = linkEvent(href);
   if (!event) return;
