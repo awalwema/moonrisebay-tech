@@ -3,6 +3,7 @@
 // A tap only counts while it is being handled, so retries run inside the tap listener. Shared with scenes.js.
 window.mbMotion = (() => {
   const waiting = new Map(); // video -> what to do once a tap allows playback
+  let reported = false; // GA hears once per page view that video was held back (how many visitors see stills)
   const retry = () => {
     const jobs = [...waiting.values()];
     waiting.clear();
@@ -14,6 +15,10 @@ window.mbMotion = (() => {
     play(video, { onBlocked = () => {}, onTap } = {}) {
       return video.play().catch((err) => {
         if (err?.name !== "NotAllowedError") return;
+        if (!reported) {
+          reported = true;
+          window.mbTrack?.("video_blocked");
+        }
         onBlocked();
         waiting.set(video, onTap || (() => this.play(video)));
       });
