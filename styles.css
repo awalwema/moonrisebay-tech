@@ -1533,7 +1533,10 @@ section:not(#contract) {
   transition: opacity 0.4s ease; /* softens any intro → loop switch */
 }
 
-/* Video refused (Low Power Mode): he is shown awake, the loop fades in over that still after a tap */
+/* Video refused (Low Power Mode): he is shown awake, and the idle loop runs over that still as an image */
+.bay-idle-image:not([src]) {
+  display: none;
+}
 .bay-hero.no-intro .bay-intro {
   display: none;
 }

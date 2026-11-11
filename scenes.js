@@ -32,9 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const showStill = () => {
       if (still?.dataset.still) still.src = still.dataset.still;
     };
-    // Loop playback; a refused loop waits on the still and starts on the next tap (paused again if off screen by then)
+    // Loop playback; a refused loop runs as an image in place of the still (or, where that can't work, waits for a tap)
     const playLoop = () =>
       window.mbMotion.play(loop, {
+        img: still,
+        src: loop.dataset.src,
         onBlocked: showStill,
         onTap: () => loop.play().then(() => visible || loop.pause(), () => {}),
       });

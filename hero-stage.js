@@ -1,8 +1,10 @@
-// Some phones won't start any video on their own (iOS Low Power Mode, data savers): play() is refused until the visitor taps.
-// Then each scene shows its finished still instead of a frozen first frame, and the next tap anywhere starts what is waiting.
-// A tap only counts while it is being handled, so retries run inside the tap listener. Shared with scenes.js.
+// Some phones won't start any video on their own (iOS Low Power Mode, data savers): play() is refused until the visitor taps,
+// and scrolling doesn't count. Safari still plays an MP4 shown in an <img> (like a GIF), so a refused loop moves on as an image.
+// Browsers that can't do that keep the finished still, and the next tap starts what is waiting (a tap only counts while it is
+// being handled, so retries run inside the tap listener). Shared with scenes.js.
 window.mbMotion = (() => {
   const waiting = new Map(); // video -> what to do once a tap allows playback
+  const asImage = new WeakSet(); // videos whose loop now runs as an image: nothing more to do
   let reported = false; // GA hears once per page view that video was held back (how many visitors see stills)
   const retry = () => {
     const jobs = [...waiting.values()];
@@ -10,9 +12,23 @@ window.mbMotion = (() => {
     jobs.forEach((job) => job());
   };
   ["touchend", "click", "keydown"].forEach((type) => window.addEventListener(type, retry, { capture: true, passive: true }));
+
+  // Load the MP4 as an image off screen first, so the still never blanks while it loads (fails where <img> can't play MP4)
+  const runAsImage = (img, src) =>
+    new Promise((resolve, reject) => {
+      const probe = new Image();
+      probe.onload = () => {
+        img.src = src;
+        resolve();
+      };
+      probe.onerror = reject;
+      probe.src = src;
+    });
+
   return {
-    // play `video`; if the browser refuses, call onBlocked() now and onTap() inside the next tap
-    play(video, { onBlocked = () => {}, onTap } = {}) {
+    // play `video`; if the browser refuses, call onBlocked() now, then run `src` in `img` (or, failing that, onTap() inside the next tap)
+    play(video, { img, src, onBlocked = () => {}, onTap } = {}) {
+      if (asImage.has(video)) return Promise.resolve();
       return video.play().catch((err) => {
         if (err?.name !== "NotAllowedError") return;
         if (!reported) {
@@ -20,7 +36,13 @@ window.mbMotion = (() => {
           window.mbTrack?.("video_blocked");
         }
         onBlocked();
-        waiting.set(video, onTap || (() => this.play(video)));
+        asImage.add(video);
+        const waitForTap = () => {
+          asImage.delete(video);
+          waiting.set(video, onTap || (() => this.play(video)));
+        };
+        if (img && src) runAsImage(img, src).catch(waitForTap);
+        else waitForTap();
       });
     },
   };
@@ -37,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const media = hero.querySelector(".bay-media");
   const intro = hero.querySelector(".bay-intro");
   const idle = hero.querySelector(".bay-idle");
+  const idleImage = hero.querySelector(".bay-idle-image");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reducedMotion || !media || !intro || !idle) return; // CSS shows the still scene instead
 
@@ -44,9 +67,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let introDone = false;
   let heroVisible = true;
 
-  // Loop playback, unless the browser refuses it until a tap (it stays on the still, never a frozen nap)
+  // Loop playback. If the browser refuses video, the loop runs as an image over the still (never a frozen nap)
   const playIdle = () =>
     window.mbMotion.play(idle, {
+      img: idleImage,
+      src: idle.querySelector("source")?.src,
       onTap: () => idle.play().then(() => heroVisible || idle.pause(), () => {}),
     });
 
@@ -61,8 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
     window.mbTrack?.("hero_intro_end", { reason });
   }
 
-  // Video refused (Low Power Mode): show him awake (the finished scene) and let the first tap start the loop.
-  // Waking up mid-page after a tap would look odd, so the intro is skipped.
+  // Video refused (Low Power Mode): show him awake (the finished scene) and go straight to the loop.
+  // Only loops can run as an image (it can't tell us when a one-off clip ends), so the intro is skipped.
   function showStill() {
     hero.classList.add("no-intro");
     toIdle("blocked");
