@@ -1,10 +1,10 @@
 // Some phones won't start any video on their own (iOS Low Power Mode, data savers): play() is refused until the visitor taps,
-// and scrolling doesn't count. Safari still plays an MP4 shown in an <img> (like a GIF), so a refused loop moves on as an image.
-// Browsers that can't do that keep the finished still, and the next tap starts what is waiting (a tap only counts while it is
-// being handled, so retries run inside the tap listener). Shared with scenes.js.
+// and scrolling doesn't count. Safari still plays an MP4 shown in an <img> (like a GIF), so a refused loop fades in as an image
+// over whatever is on screen. Browsers that can't do that show the finished still instead, and the next tap starts what is
+// waiting (a tap only counts while it is being handled, so retries run inside the tap listener). Shared with scenes.js.
 window.mbMotion = (() => {
   const waiting = new Map(); // video -> what to do once a tap allows playback
-  const asImage = new WeakSet(); // videos whose loop now runs as an image: nothing more to do
+  const handled = new WeakSet(); // refused videos already dealt with (running as an image, or waiting for a tap)
   let reported = false; // GA hears once per page view that video was held back (how many visitors see stills)
   const retry = () => {
     const jobs = [...waiting.values()];
@@ -13,35 +13,42 @@ window.mbMotion = (() => {
   };
   ["touchend", "click", "keydown"].forEach((type) => window.addEventListener(type, retry, { capture: true, passive: true }));
 
-  // Load the MP4 as an image off screen first, so the still never blanks while it loads (fails where <img> can't play MP4)
-  const runAsImage = (img, src) =>
+  // A copy of `template` (same place and size) showing the MP4, faded in once it is ready (rejects where <img> can't play MP4)
+  const fadeInAsImage = (template, src) =>
     new Promise((resolve, reject) => {
-      const probe = new Image();
-      probe.onload = () => {
-        img.src = src;
+      const pic = template.cloneNode();
+      pic.removeAttribute("loading");
+      pic.classList.add("motion-image");
+      pic.onload = () => {
+        requestAnimationFrame(() => pic.classList.add("is-on"));
         resolve();
       };
-      probe.onerror = reject;
-      probe.src = src;
+      pic.onerror = () => {
+        pic.remove();
+        reject();
+      };
+      pic.src = src;
+      template.after(pic);
     });
 
   return {
-    // play `video`; if the browser refuses, call onBlocked() now, then run `src` in `img` (or, failing that, onTap() inside the next tap)
+    // play `video`; if the browser refuses, fade `src` in as an image over `img`.
+    // Where that can't work: onBlocked() now (show the still) and onTap() inside the next tap.
     play(video, { img, src, onBlocked = () => {}, onTap } = {}) {
-      if (asImage.has(video)) return Promise.resolve();
+      if (handled.has(video)) return Promise.resolve();
       return video.play().catch((err) => {
         if (err?.name !== "NotAllowedError") return;
         if (!reported) {
           reported = true;
           window.mbTrack?.("video_blocked");
         }
-        onBlocked();
-        asImage.add(video);
+        handled.add(video);
         const waitForTap = () => {
-          asImage.delete(video);
+          onBlocked();
+          handled.delete(video);
           waiting.set(video, onTap || (() => this.play(video)));
         };
-        if (img && src) runAsImage(img, src).catch(waitForTap);
+        if (img && src) fadeInAsImage(img, src).catch(waitForTap);
         else waitForTap();
       });
     },
@@ -72,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.mbMotion.play(idle, {
       img: idleImage,
       src: idle.querySelector("source")?.src,
+      onBlocked: () => hero.classList.add("no-intro"), // can't move at all: show him awake (the finished scene)
       onTap: () => idle.play().then(() => heroVisible || idle.pause(), () => {}),
     });
 
@@ -86,12 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.mbTrack?.("hero_intro_end", { reason });
   }
 
-  // Video refused (Low Power Mode): show him awake (the finished scene) and go straight to the loop.
-  // Only loops can run as an image (it can't tell us when a one-off clip ends), so the intro is skipped.
-  function showStill() {
-    hero.classList.add("no-intro");
-    toIdle("blocked");
-  }
 
   function playIntro() {
     introStarted = true;
@@ -106,7 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     intro.play().catch((err) => {
       if (document.hidden) document.addEventListener("visibilitychange", playIntro, { once: true });
-      else if (err?.name === "NotAllowedError") showStill();
+      // Video refused (Low Power Mode): go straight to the loop, which fades in over the opening frame as an image.
+      // Only loops can run as an image (an image can't tell us when a one-off clip ends), so the intro is skipped.
+      else if (err?.name === "NotAllowedError") toIdle("blocked");
     });
   }
 

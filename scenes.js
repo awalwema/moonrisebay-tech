@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const showStill = () => {
       if (still?.dataset.still) still.src = still.dataset.still;
     };
-    // Loop playback; a refused loop runs as an image in place of the still (or, where that can't work, waits for a tap)
+    // Loop playback; a refused loop fades in as an image over the still (or, where that can't work, waits on the finished still for a tap)
     const playLoop = () =>
       window.mbMotion.play(loop, {
         img: still,
@@ -54,10 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const start = () => {
       if (started || document.hidden) return;
       started = true;
-      intro.play().catch(() => {
-        showStill(); // refused: settle on the finished scene, and go straight to the loop
-        toLoop();
-      });
+      // Refused (Low Power Mode): go straight to the loop, which fades in as an image (or settles on the finished still)
+      intro.play().catch(toLoop);
     };
 
     // Show the intro only once it is actually playing, so the still never flashes to an empty frame
