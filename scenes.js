@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const playLoop = () =>
       window.mbMotion.play(loop, {
         img: still,
-        src: loop.dataset.src,
         onBlocked: showStill,
         onTap: () => loop.play().then(() => visible || loop.pause(), () => {}),
       });

@@ -1,6 +1,6 @@
 // Some phones won't start any video on their own (iOS Low Power Mode, data savers): play() is refused until the visitor taps,
-// and scrolling doesn't count. Safari still plays an MP4 shown in an <img> (like a GIF), so a refused loop fades in as an image
-// over whatever is on screen. Browsers that can't do that show the finished still instead, and the next tap starts what is
+// and scrolling doesn't count. Animated images still play, so a refused loop fades in as an animated WebP (its data-motion)
+// over whatever is on screen. (An MP4 in an <img> plays too, but Safari fails to reload it after scrolling away and back.) Browsers that can't do that show the finished still instead, and the next tap starts what is
 // waiting (a tap only counts while it is being handled, so retries run inside the tap listener). Shared with scenes.js.
 window.mbMotion = (() => {
   const waiting = new Map(); // video -> what to do once a tap allows playback
@@ -13,28 +13,42 @@ window.mbMotion = (() => {
   };
   ["touchend", "click", "keydown"].forEach((type) => window.addEventListener(type, retry, { capture: true, passive: true }));
 
-  // A copy of `template` (same place and size) showing the MP4, faded in once it is ready (rejects where <img> can't play MP4)
-  const fadeInAsImage = (template, src) =>
+  // A copy of `template` (same place and size) showing the animation, faded in once it is ready (rejects if it can't load).
+  // If a browser drops it off screen and then fails to reload it: ask again, and if it keeps failing, onLost().
+  const fadeInAsImage = (template, src, onLost) =>
     new Promise((resolve, reject) => {
       const pic = template.cloneNode();
+      let shown = false;
+      let retries = 0;
       pic.removeAttribute("loading");
       pic.classList.add("motion-image");
       pic.onload = () => {
+        retries = 0;
+        if (shown) return;
+        shown = true;
         requestAnimationFrame(() => pic.classList.add("is-on"));
         resolve();
       };
       pic.onerror = () => {
-        pic.remove();
-        reject();
+        if (!shown) {
+          pic.remove();
+          reject();
+        } else if (retries < 2) {
+          retries += 1;
+          setTimeout(() => (pic.src = `${src}#retry${retries}`), 600);
+        } else {
+          pic.remove();
+          onLost();
+        }
       };
       pic.src = src;
       template.after(pic);
     });
 
   return {
-    // play `video`; if the browser refuses, fade `src` in as an image over `img`.
-    // Where that can't work: onBlocked() now (show the still) and onTap() inside the next tap.
-    play(video, { img, src, onBlocked = () => {}, onTap } = {}) {
+    // play `video`; if the browser refuses, fade its data-motion animation in over `img`.
+    // Where that can't work: onBlocked() (show the still) and onTap() inside the next tap.
+    play(video, { img, onBlocked = () => {}, onTap } = {}) {
       if (handled.has(video)) return Promise.resolve();
       return video.play().catch((err) => {
         if (err?.name !== "NotAllowedError") return;
@@ -48,7 +62,8 @@ window.mbMotion = (() => {
           handled.delete(video);
           waiting.set(video, onTap || (() => this.play(video)));
         };
-        if (img && src) fadeInAsImage(img, src).catch(waitForTap);
+        const motion = video.dataset.motion;
+        if (img && motion) fadeInAsImage(img, motion, waitForTap).catch(waitForTap);
         else waitForTap();
       });
     },
@@ -78,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const playIdle = () =>
     window.mbMotion.play(idle, {
       img: idleImage,
-      src: idle.querySelector("source")?.src,
       onBlocked: () => hero.classList.add("no-intro"), // can't move at all: show him awake (the finished scene)
       onTap: () => idle.play().then(() => heroVisible || idle.pause(), () => {}),
     });

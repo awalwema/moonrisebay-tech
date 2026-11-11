@@ -88,10 +88,10 @@
         <video class="bay-video bay-intro" muted playsinline preload="auto" poster="character/hero/poster.webp">
           <source src="character/hero/intro.mp4" type="video/mp4" />
         </video>
-        <video class="bay-video bay-idle" muted playsinline loop preload="auto">
+        <video class="bay-video bay-idle" muted playsinline loop preload="auto" data-motion="character/hero/idle.webp">
           <source src="character/hero/idle.mp4" type="video/mp4" />
         </video>
-        <img class="bay-video bay-idle-image" alt="" /><!-- the idle loop as an image, only when video is refused -->
+        <img class="bay-video bay-idle-image" alt="" /><!-- where the idle loop fades in as an image when video is refused -->
       </div>
 
       <div class="bay-inner">
@@ -156,7 +156,7 @@
           <figure class="bay-scene" data-scene aria-hidden="true">
             <img class="scene-still" src="character/build/poster.webp" data-still="character/build/still.webp" alt="" loading="lazy" width="1040" height="780" />
             <video class="scene-intro" muted playsinline preload="none" data-src="character/build/intro.mp4"></video>
-            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/build/loop.mp4"></video>
+            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/build/loop.mp4" data-motion="character/build/loop.webp"></video>
           </figure>
         </div>
 
@@ -231,7 +231,7 @@
           <figure class="bay-scene" data-scene aria-hidden="true">
             <img class="scene-still" src="character/projects/poster.webp" data-still="character/projects/still.webp" alt="" loading="lazy" width="1040" height="780" />
             <video class="scene-intro" muted playsinline preload="none" data-src="character/projects/intro.mp4"></video>
-            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/projects/loop.mp4"></video>
+            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/projects/loop.mp4" data-motion="character/projects/loop.webp"></video>
           </figure>
         </div>
 
@@ -435,7 +435,7 @@
           <figure class="bay-scene" data-scene aria-hidden="true">
             <img class="scene-still" src="character/contract/poster.webp" data-still="character/contract/still.webp" alt="" loading="lazy" width="1040" height="780" />
             <video class="scene-intro" muted playsinline preload="none" data-src="character/contract/intro.mp4"></video>
-            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/contract/loop.mp4"></video>
+            <video class="scene-loop" muted playsinline loop preload="none" data-src="character/contract/loop.mp4" data-motion="character/contract/loop.webp"></video>
           </figure>
         </div>
 
@@ -736,7 +736,7 @@
         <figure class="bay-scene" data-scene aria-hidden="true">
           <img class="scene-still" src="character/contact/poster.webp" data-still="character/contact/still.webp" alt="" loading="lazy" width="1040" height="780" />
           <video class="scene-intro" muted playsinline preload="none" data-src="character/contact/intro.mp4"></video>
-          <video class="scene-loop" muted playsinline loop preload="none" data-src="character/contact/loop.mp4"></video>
+          <video class="scene-loop" muted playsinline loop preload="none" data-src="character/contact/loop.mp4" data-motion="character/contact/loop.webp"></video>
         </figure>
       </div>
     </section>
